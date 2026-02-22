@@ -1,4 +1,4 @@
-# claude-plugin-ops — Development Guide
+# plugin-ops — Development Guide
 
 ## Overview
 
@@ -9,15 +9,17 @@ Complements Anthropic's `plugin-dev` plugin (which handles plugin creation, stru
 ## Directory Structure
 
 ```
-claude-plugin-ops/
+plugin-ops/
 ├── .claude-plugin/plugin.json
+├── scripts/
+│   └── release.py             # Deterministic release workflow
 ├── skills/
 │   ├── issues/SKILL.md        # Manage ISSUES.md
 │   ├── reflect/SKILL.md       # Self-reflection analysis
 │   ├── optimize/SKILL.md      # Optimize with non-regression
 │   ├── fix/SKILL.md           # Fix issues with non-regression
 │   ├── marketplace/SKILL.md   # Manage plugin marketplaces
-│   └── release/SKILL.md       # Version bump + publish
+│   └── release/SKILL.md       # Version bump + publish (thin wrapper for release.py)
 ├── knowledge/
 │   ├── lifecycle-formats.md   # ISSUES.md + REFLECTIONS.md formats
 │   ├── marketplace.md         # marketplace.json schema, multi-provider

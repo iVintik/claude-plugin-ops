@@ -1,4 +1,4 @@
-# claude-plugin-ops
+# plugin-ops
 
 Plugin lifecycle management for Claude Code. Track issues, audit health, optimize, fix, release, and manage marketplaces.
 
