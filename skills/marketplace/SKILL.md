@@ -11,7 +11,7 @@ Manage Claude Code plugin marketplaces. A marketplace is a git repository with a
 ## Parse Arguments
 
 Parse `$ARGUMENTS` for a subcommand:
-- `init` — Create a new marketplace repository
+- `init <local-path>` — Create a new marketplace repository
 - `list [--store name]` — List plugins in a marketplace
 - `add <plugin-path> [--store name]` — Add a plugin to a marketplace
 - `remove <plugin-name> [--store name]` — Remove a plugin from a marketplace
@@ -26,11 +26,11 @@ Look for `.claude/plugin-ops.local.md` in:
 1. Current working directory
 2. User's home directory
 
-Parse the YAML frontmatter to get marketplace configurations.
+Parse the YAML frontmatter to get marketplace `local_path` entries.
 
-If `--store name` is provided, use that marketplace. Otherwise use `default_marketplace` from config.
+If `--store name` is provided, use that marketplace. Otherwise use the first configured marketplace.
 
-If no config exists and no `--store` flag, prompt the user to set up a marketplace or provide `--store-url` directly.
+If no config exists and no `--store` flag, prompt the user to set up a marketplace.
 
 ## init — Create New Marketplace
 
@@ -38,6 +38,7 @@ Ask the user for:
 1. **Provider**: `github` or `gitlab` (detect from context if possible)
 2. **Repository name**: e.g., `my-claude-plugins`
 3. **Visibility**: public or private (default: private)
+4. **Local path**: where to clone it
 
 ### For GitHub:
 ```bash
@@ -72,21 +73,19 @@ Commit and push.
 
 ### Update config:
 
-Offer to add the new marketplace to `.claude/plugin-ops.local.md`. Create the config file if it doesn't exist.
+Add the new marketplace to `.claude/plugin-ops.local.md`. Create the config file if it doesn't exist.
 
 ## list — List Marketplace Plugins
 
 For the target marketplace(s):
 
-1. Determine the marketplace repo URL from config
-2. Fetch `marketplace.json`:
-   - For GitHub: `gh api repos/<owner>/<repo>/contents/.claude-plugin/marketplace.json` and decode
-   - For GitLab: `curl "https://<url>/api/v4/projects/<id>/repository/files/.claude-plugin%2Fmarketplace.json/raw?ref=<branch>"`
-   - Or if the repo is cloned locally, read directly
+1. Get `local_path` from config
+2. Read `.claude-plugin/marketplace.json` directly from the local clone
 3. Display plugins table:
 
 ```
-Marketplace: {name} ({provider})
+Marketplace: {name} ({local_path})
+Remote: {git remote get-url origin}
 
 | Plugin | Version | Description |
 |--------|---------|-------------|
@@ -103,32 +102,29 @@ If `--store` is not specified and multiple marketplaces are configured, list all
 1. Read the plugin's `.claude-plugin/plugin.json` from `<plugin-path>`
 2. Extract: name, description, version
 3. Determine the plugin's git remote URL (`git remote get-url origin`)
-4. Clone or fetch the target marketplace repo to a temp directory
-5. Read `marketplace.json`
-6. Check if plugin already exists:
+4. Read `marketplace.json` from the target marketplace's `local_path`
+5. Check if plugin already exists:
    - If yes: ask to update version/description instead
    - If no: append new entry
-7. Write updated `marketplace.json`
-8. Commit: `"add: <plugin-name> v<version>"`
-9. Push to remote
-10. Display confirmation
+6. Write updated `marketplace.json`
+7. Commit: `"add: <plugin-name> v<version>"`
+8. Push to remote
+9. Display confirmation
 
 ## remove — Remove Plugin from Marketplace
 
-1. Clone or fetch the target marketplace repo
-2. Read `marketplace.json`
-3. Find the plugin by name
-4. If not found, show available plugins
-5. Confirm removal with the user
-6. Remove the entry from `plugins` array
-7. Write updated `marketplace.json`
-8. Commit: `"remove: <plugin-name>"`
-9. Push to remote
-10. Display confirmation
+1. Read `marketplace.json` from the target marketplace's `local_path`
+2. Find the plugin by name
+3. If not found, show available plugins
+4. Confirm removal with the user
+5. Remove the entry from `plugins` array
+6. Write updated `marketplace.json`
+7. Commit: `"remove: <plugin-name>"`
+8. Push to remote
+9. Display confirmation
 
 ## Error Handling
 
-- If `gh` or `glab` is not installed, provide manual instructions
-- If auth fails, guide the user to authenticate (`gh auth login`, `glab auth login`)
-- If marketplace repo is not accessible, report the error clearly
+- If `local_path` doesn't exist or has no `marketplace.json`, report clearly
+- If git push fails, report and suggest `git pull` first
 - Never expose tokens or credentials in output
