@@ -52,3 +52,13 @@ Marketplaces:
 ```
 
 **On error (exit 1 or 2):** Display the error message from JSON `error` field and suggest fixes.
+
+## CI Alternative
+
+If the plugin repo has GitHub Actions set up for automated releases (see `knowledge/marketplace.md` → "Automated Releases via CI"), inform the user they can also release by:
+
+1. Bump version in `.claude-plugin/plugin.json`
+2. Commit and push
+3. Create a GitHub release — CI handles npm publish + marketplace update
+
+Use `/plugin-ops:release` for local releases, or GitHub releases for CI-driven ones. Both keep versions in sync.

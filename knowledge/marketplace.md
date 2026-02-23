@@ -50,6 +50,148 @@ A plugin can be published to multiple marketplaces. The user configures their ma
 - Any git remote that supports push (Gitea, Bitbucket, self-hosted)
 - No marketplace management CLI — manual or API-based
 
+## Automated Releases via CI
+
+Plugins can automate releases using GitHub Actions with a **repository dispatch** pattern. Instead of duplicating marketplace update logic in every plugin repo, the marketplace repo owns a single workflow that receives dispatch events.
+
+### Architecture
+
+```
+Plugin repo (on GitHub release)
+  ├── npm job: publishes to public npm registry (for OpenClaw)
+  └── marketplace job: fires repository_dispatch with {plugin, version}
+                            │
+                            ▼
+Marketplace repo (update-plugin.yml workflow)
+  └── Receives dispatch → updates marketplace.json → commits → pushes
+```
+
+### Plugin Repo Workflow (`.github/workflows/publish.yml`)
+
+```yaml
+name: Publish
+on:
+  release:
+    types: [published]
+
+jobs:
+  npm:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  marketplace:
+    name: Update Claude marketplace
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read plugin metadata
+        id: meta
+        run: |
+          echo "name=$(jq -r .name .claude-plugin/plugin.json)" >> "$GITHUB_OUTPUT"
+          echo "version=$(jq -r .version .claude-plugin/plugin.json)" >> "$GITHUB_OUTPUT"
+      - name: Dispatch marketplace update
+        run: |
+          gh api repos/<owner>/<marketplace-repo>/dispatches \
+            -f event_type=plugin-release \
+            -f 'client_payload[plugin]=${{ steps.meta.outputs.name }}' \
+            -f 'client_payload[version]=${{ steps.meta.outputs.version }}'
+        env:
+          GH_TOKEN: ${{ secrets.MARKETPLACE_TOKEN }}
+```
+
+### Marketplace Repo Workflow (`.github/workflows/update-plugin.yml`)
+
+```yaml
+name: Update plugin version
+on:
+  repository_dispatch:
+    types: [plugin-release]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update marketplace.json
+        run: |
+          jq --arg name "${{ github.event.client_payload.plugin }}" \
+             --arg ver "${{ github.event.client_payload.version }}" \
+             '(.plugins[] | select(.name == $name)).version = $ver' \
+             .claude-plugin/marketplace.json > tmp.json
+          mv tmp.json .claude-plugin/marketplace.json
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .claude-plugin/marketplace.json
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "release: ${{ github.event.client_payload.plugin }} v${{ github.event.client_payload.version }}"
+            git push
+          fi
+```
+
+### Setting Up a New Plugin for CI Release
+
+1. **Ensure plugin is listed in marketplace** — use `/plugin-ops:marketplace add` first
+2. **Add `package.json`** for npm publishing (with `license`, `repository`, `files` fields)
+3. **Add `openclaw.plugin.json`** if the plugin also targets OpenClaw
+4. **Copy the publish workflow** above to `.github/workflows/publish.yml`
+5. **Set secrets** on the plugin repo:
+   ```bash
+   gh secret set NPM_TOKEN --repo <org>/<repo>
+   gh secret set MARKETPLACE_TOKEN --repo <org>/<repo>
+   ```
+6. **Ensure marketplace has the dispatch workflow** — copy `update-plugin.yml` above
+7. **Test**: create a GitHub release → both npm and marketplace should update
+
+### Required Secrets
+
+| Secret | Purpose | How to create |
+|--------|---------|---------------|
+| `NPM_TOKEN` | Publish to npm | https://www.npmjs.com/settings/tokens → **Automation** type |
+| `MARKETPLACE_TOKEN` | Dispatch to marketplace repo | GitHub fine-grained PAT with **Contents: Read and write** on the marketplace repo |
+
+### Token Renewal
+
+**NPM_TOKEN** (npm Automation token):
+- No expiration by default — regenerate only if compromised
+- Create at https://www.npmjs.com/settings/tokens/create, type **Automation**
+- Update secret: `gh secret set NPM_TOKEN --repo <org>/<repo>`
+
+**MARKETPLACE_TOKEN** (GitHub fine-grained PAT):
+- Expires after the duration you set (max 1 year) — **set a calendar reminder**
+- Create at https://github.com/settings/tokens?type=beta
+- Scope: **Only select repositories** → marketplace repo, **Contents: Read and write**
+- The same PAT works across all plugin repos
+- When expired, regenerate and update on all repos:
+  ```bash
+  gh secret set MARKETPLACE_TOKEN --repo <org>/<plugin-1>
+  gh secret set MARKETPLACE_TOKEN --repo <org>/<plugin-2>
+  ```
+
+### CI vs Local Release
+
+| Method | When to use |
+|--------|------------|
+| CI (GitHub Actions) | Standard releases — create a GitHub release, everything auto-publishes |
+| Local (`/plugin-ops:release`) | Quick iteration, no npm needed, or when CI isn't set up yet |
+
+Both methods keep `plugin.json` version and `marketplace.json` version in sync. CI additionally publishes to npm.
+
 ## Version Sync Rule
 
 The `version` in `marketplace.json` MUST match the `version` in the plugin's `plugin.json`. The `release` skill enforces this.

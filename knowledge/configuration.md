@@ -54,3 +54,7 @@ If the config file doesn't exist, marketplace and release skills will:
 1. Prompt the user to set up a marketplace
 2. Offer to create the config file
 3. Work with explicit `--marketplace-path` argument as a fallback
+
+## CI Pipeline Setup
+
+For plugins that should auto-publish on GitHub release, see `knowledge/marketplace.md` → "Automated Releases via CI" and "Setting Up a New Plugin for CI Release" for the full workflow templates, required secrets, and token renewal instructions.
