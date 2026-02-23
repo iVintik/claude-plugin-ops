@@ -1,7 +1,7 @@
 {
   "name": "plugin-ops",
   "description": "Plugin lifecycle management \u2014 issue tracking, health audits, optimization, fixing, releasing, and marketplace operations for Claude Code plugins",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "author": {
     "name": "iVintik"
   },
