@@ -4,7 +4,7 @@
 Bumps plugin version, commits, pushes, and updates marketplace entries.
 
 Usage:
-    python3 release.py <plugin-path> <version> [--dry-run] [--store NAME] [--config PATH]
+    python3 release.py <plugin-path> <version> [--dry-run] [--no-tag] [--store NAME] [--config PATH]
     python3 release.py <plugin-path> --suggest
 
 Exit codes:
@@ -185,7 +185,7 @@ def suggest(plugin_path):
 # Main release workflow
 # ---------------------------------------------------------------------------
 
-def release(plugin_path, new_version, dry_run=False, store=None, config_path=None):
+def release(plugin_path, new_version, dry_run=False, store=None, config_path=None, no_tag=False):
     # 1. Read plugin.json
     data, pj_path = read_plugin_json(plugin_path)
     plugin_name = data.get("name", "unknown")
@@ -219,6 +219,12 @@ def release(plugin_path, new_version, dry_run=False, store=None, config_path=Non
         run(f"git add .claude-plugin/plugin.json", cwd=plugin_path)
         run(f'git commit -m "release: v{new_version}"', cwd=plugin_path)
         run("git push", cwd=plugin_path)
+
+        # Create and push git tag
+        if not no_tag:
+            run(f'git tag -a v{new_version} -m "release: v{new_version}"', cwd=plugin_path)
+            run(f"git push origin v{new_version}", cwd=plugin_path)
+    tag_pushed = not dry_run and not no_tag
     plugin_pushed = True
 
     # 5. Find and update marketplaces
@@ -301,6 +307,7 @@ def release(plugin_path, new_version, dry_run=False, store=None, config_path=Non
         "new_version": new_version,
         "dry_run": dry_run,
         "plugin_pushed": plugin_pushed and not dry_run,
+        "tag_pushed": tag_pushed,
         "marketplaces": marketplace_results,
         "warnings": warnings,
     }
@@ -335,6 +342,7 @@ def main():
     parser.add_argument("version", nargs="?", help="New version (semver)")
     parser.add_argument("--suggest", action="store_true", help="Print version suggestions")
     parser.add_argument("--dry-run", action="store_true", help="Show what would happen")
+    parser.add_argument("--no-tag", action="store_true", help="Skip git tag creation")
     parser.add_argument("--store", help="Target a specific marketplace only")
     parser.add_argument("--config", help="Path to config file")
 
@@ -356,6 +364,7 @@ def main():
         dry_run=args.dry_run,
         store=args.store,
         config_path=args.config,
+        no_tag=args.no_tag,
     )
 
 

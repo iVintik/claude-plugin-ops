@@ -1,7 +1,7 @@
 ---
 name: release
 description: Bump plugin version and publish to marketplace(s). Use when the user asks to release a plugin, bump version, publish a new version, deploy a plugin update, tag a release, ship it, commit and release, push a release, or says "release this". IMPORTANT — this is the ONLY correct way to release any repo containing .claude-plugin/. Never use manual git tags or gh release for plugins.
-argument-hint: "[plugin-path] [version] [--store name] [--dry-run]"
+argument-hint: "[plugin-path] [version] [--store name] [--dry-run] [--no-tag]"
 ---
 
 # Plugin Release
@@ -14,7 +14,8 @@ Parse `$ARGUMENTS`:
 - **First positional**: Path to plugin directory (default: current directory)
 - **Version**: semver string like `1.2.0` (optional — will prompt if missing)
 - `--store name`: Target a specific marketplace only
-- `--dry-run`: Show what would happen without making changes
+- `--dry-run`: Show what would happen
+- `--no-tag`: Skip git tag creation without making changes
 
 Set `PLUGIN_PATH` and `RELEASE_ARGS` from the parsed values.
 
@@ -55,10 +56,9 @@ Marketplaces:
 
 ## CI Alternative
 
-If the plugin repo has GitHub Actions set up for automated releases (see `knowledge/marketplace.md` → "Automated Releases via CI"), inform the user they can also release by:
+If the plugin repo has CI set up for automated releases (see `knowledge/marketplace.md` → "Automated Releases via CI"), the tag pushed by this skill triggers the CI pipeline automatically:
 
-1. Bump version in `.claude-plugin/plugin.json`
-2. Commit and push
-3. Create a GitHub release — CI handles npm publish + marketplace update
+- **GitHub**: CI triggers on GitHub release → dispatches to marketplace repo → publishes to npm
+- **GitLab**: CI triggers on tag push → triggers marketplace pipeline via API
 
-Use `/plugin-ops:release` for local releases, or GitHub releases for CI-driven ones. Both keep versions in sync.
+Use `/plugin-ops:release` for local releases. If CI is configured, the marketplace update happens automatically after the tag push — the local marketplace update is then redundant (but harmless).

@@ -57,4 +57,9 @@ If the config file doesn't exist, marketplace and release skills will:
 
 ## CI Pipeline Setup
 
-For plugins that should auto-publish on GitHub release, see `knowledge/marketplace.md` → "Automated Releases via CI" and "Setting Up a New Plugin for CI Release" for the full workflow templates, required secrets, and token renewal instructions.
+For plugins that should auto-publish via CI, see `knowledge/marketplace.md` → "Automated Releases via CI":
+
+- **GitHub**: Triggers on GitHub release → dispatches to marketplace repo. See "GitHub Actions" section.
+- **GitLab**: Triggers on tag push → triggers marketplace pipeline via API. See "GitLab CI" section.
+
+Both sections include full workflow templates, required tokens/variables, and setup instructions.

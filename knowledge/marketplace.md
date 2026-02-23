@@ -183,14 +183,108 @@ jobs:
   gh secret set MARKETPLACE_TOKEN --repo <org>/<plugin-2>
   ```
 
+### GitLab CI
+
+For GitLab-hosted plugins (including on-prem GitLab), use **multi-project pipelines** with the `trigger` keyword. The plugin repo triggers a downstream pipeline on the marketplace repo using GitLab's built-in `CI_JOB_TOKEN` — no tokens or CI/CD variables to configure.
+
+#### Architecture
+
+```
+Plugin repo (on tag push v*)
+  └── read-metadata job: extracts plugin name + version from tag
+  └── update-marketplace job: triggers downstream pipeline via `trigger` keyword
+                            │  (passes PLUGIN_NAME + PLUGIN_VERSION via dotenv)
+                            ▼
+Marketplace repo (triggered pipeline)
+  └── Receives variables → updates marketplace.json → commits → pushes (CI_JOB_TOKEN)
+```
+
+#### Prerequisites
+
+The marketplace project must allow job tokens from plugin repos:
+- Marketplace project → Settings → CI/CD → **Job token permissions** → add plugin repos (or their parent group)
+
+#### Plugin Repo Pipeline (`.gitlab-ci.yml`)
+
+```yaml
+stages:
+  - prepare
+  - release
+
+read-metadata:
+  stage: prepare
+  image: alpine:latest
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
+  before_script:
+    - apk add --no-cache jq
+  script:
+    - echo "PLUGIN_NAME=$(jq -r .name .claude-plugin/plugin.json)" >> build.env
+    - echo "PLUGIN_VERSION=${CI_COMMIT_TAG#v}" >> build.env
+  artifacts:
+    reports:
+      dotenv: build.env
+
+update-marketplace:
+  stage: release
+  needs: [read-metadata]
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
+  trigger:
+    project: <group>/<marketplace-repo>
+    branch: <default-branch>
+```
+
+#### Marketplace Repo Pipeline (`.gitlab-ci.yml`)
+
+```yaml
+stages:
+  - update
+
+update-plugin-version:
+  stage: update
+  image: alpine:latest
+  rules:
+    - if: '$PLUGIN_NAME && $PLUGIN_VERSION'
+  before_script:
+    - apk add --no-cache git jq
+  script:
+    - |
+      jq --arg name "$PLUGIN_NAME" \
+         --arg ver "$PLUGIN_VERSION" \
+         '(.plugins[] | select(.name == $name)).version = $ver' \
+         .claude-plugin/marketplace.json > tmp.json
+      mv tmp.json .claude-plugin/marketplace.json
+      git config user.name "gitlab-ci[bot]"
+      git config user.email "ci@your-gitlab-host.com"
+      git add .claude-plugin/marketplace.json
+      if git diff --cached --quiet; then
+        echo "No changes needed"
+      else
+        git commit -m "release: ${PLUGIN_NAME} v${PLUGIN_VERSION}"
+        git push "https://gitlab-ci-token:${CI_JOB_TOKEN}@your-gitlab-host.com/${CI_PROJECT_PATH}.git" HEAD:develop
+      fi
+```
+
+#### Setting Up a New Plugin for GitLab CI Release
+
+1. **Ensure plugin is listed in marketplace** — use `/plugin-ops:marketplace add` first
+2. **Grant job token access** — marketplace project → Settings → CI/CD → Job token permissions → add the plugin repo (or its parent group for all repos at once)
+3. **Copy `.gitlab-ci.yml`** template above to the plugin repo (update `project` and `branch` in the `trigger` block)
+4. **Ensure marketplace repo has its `.gitlab-ci.yml`** with the `update-plugin-version` job
+5. **Test**: push a semver tag (`git tag -a v1.0.0 -m "release: v1.0.0" && git push origin v1.0.0`) → marketplace should update
+
+No CI/CD variables or tokens needed on any repo.
+
 ### CI vs Local Release
 
 | Method | When to use |
 |--------|------------|
-| CI (GitHub Actions) | Standard releases — create a GitHub release, everything auto-publishes |
-| Local (`/plugin-ops:release`) | Quick iteration, no npm needed, or when CI isn't set up yet |
+| CI (GitHub Actions) | Standard releases for GitHub-hosted plugins — create a GitHub release, auto-publishes to npm + marketplace |
+| CI (GitLab) | Standard releases for GitLab-hosted plugins — push a tag, auto-updates marketplace |
+| Local (`/plugin-ops:release`) | Quick iteration, or when CI isn't set up yet. If CI is configured, the tag push triggers CI automatically — marketplace update is then redundant (but harmless) |
 
-Both methods keep `plugin.json` version and `marketplace.json` version in sync. CI additionally publishes to npm.
+Both methods keep `plugin.json` version and `marketplace.json` version in sync.
 
 ## Version Sync Rule
 
