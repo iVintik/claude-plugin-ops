@@ -139,7 +139,7 @@ def release(plugin_path, new_version, dry_run=False, no_tag=False):
             run(f"git push origin v{new_version}", cwd=plugin_path)
     tag_pushed = not dry_run and not no_tag
 
-    # 5. Output result (before install, which may produce noisy output)
+    # 5. Output result
     result = {
         "plugin": plugin_name,
         "old_version": current_version,
@@ -150,23 +150,7 @@ def release(plugin_path, new_version, dry_run=False, no_tag=False):
         "warnings": warnings,
     }
 
-    # 6. Reinstall plugin locally (after printing result)
-    if not dry_run:
-        # Flush JSON result first so caller always gets it
-        print(json.dumps(result, indent=2), flush=True)
-
-        # Install may produce interactive/noisy output — redirect to stderr
-        install = subprocess.run(
-            f"claude plugin install {plugin_name}",
-            shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-        )
-        # Report install status to stderr only
-        if install.returncode == 0:
-            print(f"Reinstalled {plugin_name} locally", file=sys.stderr)
-        else:
-            print(f"Warning: claude plugin install failed (exit {install.returncode})", file=sys.stderr)
-    else:
-        print(json.dumps(result, indent=2))
+    print(json.dumps(result, indent=2))
 
     sys.exit(0)
 

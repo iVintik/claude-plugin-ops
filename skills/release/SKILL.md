@@ -1,6 +1,6 @@
 ---
 name: release
-description: Bump plugin version and publish to marketplace(s). Use when the user asks to release a plugin, bump version, publish a new version, deploy a plugin update, tag a release, ship it, commit and release, push a release, or says "release this". IMPORTANT — this is the ONLY correct way to release any repo containing .claude-plugin/. Never use manual git tags or gh release for plugins.
+description: Bump plugin version, commit, push, and tag. Use when the user asks to release a plugin, bump version, publish a new version, deploy a plugin update, tag a release, ship it, commit and release, push a release, or says "release this". IMPORTANT — this is the ONLY correct way to release any repo containing .claude-plugin/. Never use manual git tags or gh release for plugins.
 argument-hint: "[plugin-path] [version] [--dry-run] [--no-tag]"
 ---
 
@@ -45,20 +45,9 @@ The script prints a JSON result to stdout.
 **On success (exit 0):** Display a human-friendly summary:
 ```
 Released {plugin} v{new_version} (was v{old_version})
-
-Plugin pushed: yes/no
-Tag pushed: yes/no
+Restart Claude Code to pick up the new version.
 ```
-
-If `tag_pushed` is true and the plugin has CI configured, mention that the marketplace will be updated automatically by the CI pipeline.
 
 **On error (exit 1 or 2):** Display the error message from JSON `error` field and suggest fixes.
 
-## Marketplace Updates
-
-This script does NOT update marketplaces directly. Marketplace updates are handled by CI:
-
-- **GitHub**: Tag triggers GitHub Actions → dispatches to marketplace repo
-- **GitLab**: Tag triggers multi-project pipeline → marketplace repo updates itself
-
-If CI is not configured, the marketplace must be updated manually or via `/plugin-ops:marketplace`.
+**IMPORTANT:** Do NOT attempt to run `claude plugin install` or any `claude` CLI subcommand — these hang when called from within a running Claude Code session. The user should restart Claude Code to pick up the new version.
