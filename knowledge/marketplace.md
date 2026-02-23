@@ -233,6 +233,8 @@ update-marketplace:
   trigger:
     project: <group>/<marketplace-repo>
     branch: <default-branch>
+    forward:
+      pipeline_variables: true
 ```
 
 #### Marketplace Repo Pipeline (`.gitlab-ci.yml`)
