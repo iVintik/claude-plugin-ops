@@ -17,7 +17,12 @@ Parse `$ARGUMENTS`:
 
 ## Locate Plugin
 
-1. Verify `.claude-plugin/plugin.json` exists
+**CRITICAL: Cache vs Repo**
+- `~/.claude/plugins/cache/` contains READ-ONLY installed copies — NEVER edit these
+- Always resolve to the real git repo before editing. Use atlas: `atlas_search_projects(query="plugin-name")` to find the repo path
+- If the plugin-path points into `~/.claude/plugins/cache/`, STOP and find the real repo first
+
+1. Verify `.claude-plugin/plugin.json` exists at the resolved repo path
 2. Read plugin name and version
 
 ## Non-Regression Protocol

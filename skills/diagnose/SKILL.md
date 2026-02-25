@@ -16,6 +16,10 @@ Parse `$ARGUMENTS`:
 
 If no arguments provided and no `.claude-plugin/plugin.json` in current directory, ask the user which plugin to diagnose.
 
+**CRITICAL: Cache vs Repo**
+- `~/.claude/plugins/cache/` contains READ-ONLY installed copies — NEVER edit these
+- Always resolve to the real git repo. Use atlas: `atlas_search_projects(query="plugin-name")` to find the repo path
+
 ## Key Principle
 
 **Frame findings as plugin defects, not agent failures.** If a skill wasn't triggered when it should have been, that's a skill description quality issue. If a hook failed silently, that's a hook configuration defect. Do NOT self-blame — report the root cause in the plugin.

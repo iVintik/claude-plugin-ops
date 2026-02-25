@@ -22,6 +22,10 @@ If no flags are provided, default to `--list`.
 
 ## Locate Plugin
 
+**CRITICAL: Cache vs Repo**
+- `~/.claude/plugins/cache/` contains READ-ONLY installed copies — NEVER edit these
+- Always resolve to the real git repo. Use atlas: `atlas_search_projects(query="plugin-name")` to find the repo path
+
 1. Check if the target directory has `.claude-plugin/plugin.json`
 2. If not found, search parent directories for a directory containing `.claude-plugin/plugin.json`
 3. If still not found, ask the user to specify the plugin path

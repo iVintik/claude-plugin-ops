@@ -28,6 +28,14 @@ plugin-ops/
 └── README.md
 ```
 
+## Critical: Cache vs Repo
+
+All plugin-ops skills operate on plugin source repos, NEVER on installed cache copies.
+
+- `~/.claude/plugins/cache/` is the installed READ-ONLY copy — edits here are lost on reinstall and invisible to git
+- Always use atlas (`atlas_search_projects`) to resolve the real repo path before editing
+- If a path resolves into `~/.claude/plugins/cache/`, STOP and find the real repo
+
 ## Design Principles
 
 - **No hooks** — Operates on other plugin directories. No safety hooks needed.
