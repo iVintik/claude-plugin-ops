@@ -38,7 +38,7 @@ All plugin-ops skills operate on plugin source repos, NEVER on installed cache c
 
 ## Design Principles
 
-- **No hooks** — Operates on other plugin directories. No safety hooks needed.
+- **Cache guard hook** — PreToolUse hook blocks Edit/Write on `~/.claude/plugins/cache/` with guidance to find the source repo via atlas.
 - **No MCP server** — All functionality through skills (markdown workflows).
 - **Non-regression** — optimize and fix skills read ISSUES.md to protect resolved fixes.
 - **ISSUES.md over database** — Lightweight, version-controlled, readable without tools.
