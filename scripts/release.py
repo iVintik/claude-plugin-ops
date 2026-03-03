@@ -60,6 +60,69 @@ def expand_path(p):
     return Path(os.path.expanduser(p)).resolve()
 
 # ---------------------------------------------------------------------------
+# Post-release helpers
+# ---------------------------------------------------------------------------
+
+def find_marketplace(plugin_name):
+    """Find the marketplace identifier for a plugin from the cache directory.
+
+    Cache layout: ~/.claude/plugins/cache/<marketplace>/<plugin-name>/<version>/
+    Returns '<plugin-name>@<marketplace>' or None.
+    """
+    cache_dir = Path.home() / ".claude" / "plugins" / "cache"
+    if not cache_dir.is_dir():
+        return None
+
+    for marketplace_dir in cache_dir.iterdir():
+        if not marketplace_dir.is_dir():
+            continue
+        plugin_dir = marketplace_dir / plugin_name
+        if plugin_dir.is_dir():
+            return f"{plugin_name}@{marketplace_dir.name}"
+    return None
+
+
+def find_stale_mcp_pids(plugin_name, old_version):
+    """Find PIDs of MCP server processes running from the old cache path.
+
+    Searches for processes whose command line contains the old cache directory.
+    Returns list of {pid, command} dicts.
+    """
+    cache_dir = Path.home() / ".claude" / "plugins" / "cache"
+    # Match any marketplace that has this plugin at the old version
+    old_version_pattern = f"/{plugin_name}/{old_version}/"
+
+    pids = []
+    try:
+        # Get all processes with full command lines
+        result = subprocess.run(
+            ["ps", "axo", "pid,command"],
+            capture_output=True, text=True, timeout=5,
+        )
+        if result.returncode != 0:
+            return pids
+
+        for line in result.stdout.splitlines()[1:]:  # skip header
+            line = line.strip()
+            if not line:
+                continue
+            parts = line.split(None, 1)
+            if len(parts) < 2:
+                continue
+            pid_str, cmd = parts
+            # Check if this process is running from the old plugin cache
+            if str(cache_dir) in cmd and old_version_pattern in cmd:
+                try:
+                    pids.append({"pid": int(pid_str), "command": cmd[:200]})
+                except ValueError:
+                    pass
+    except (subprocess.TimeoutExpired, OSError):
+        pass
+
+    return pids
+
+
+# ---------------------------------------------------------------------------
 # Plugin operations
 # ---------------------------------------------------------------------------
 
@@ -139,7 +202,15 @@ def release(plugin_path, new_version, dry_run=False, no_tag=False):
             run(f"git push origin v{new_version}", cwd=plugin_path)
     tag_pushed = not dry_run and not no_tag
 
-    # 5. Output result
+    # 5. Detect marketplace and stale MCP processes
+    marketplace_id = find_marketplace(plugin_name)
+    update_command = None
+    if marketplace_id:
+        update_command = f"claude plugin update {marketplace_id}"
+
+    mcp_pids = find_stale_mcp_pids(plugin_name, current_version)
+
+    # 6. Output result
     result = {
         "plugin": plugin_name,
         "old_version": current_version,
@@ -148,6 +219,8 @@ def release(plugin_path, new_version, dry_run=False, no_tag=False):
         "plugin_pushed": not dry_run,
         "tag_pushed": tag_pushed,
         "warnings": warnings,
+        "update_command": update_command,
+        "mcp_pids": mcp_pids,
     }
 
     print(json.dumps(result, indent=2))
