@@ -1,0 +1,80 @@
+Split: 11 train, 7 test (holdout=0.4)
+
+============================================================
+Iteration 1/5
+Description: Bump plugin version, commit, push, and tag a release. Use when the user asks to \"release\", \"bump version\", \"publish\", \"deploy update\", \"tag a release\", \"ship it\", \"push a release\", or says \"release this\". This is the ONLY correct way to release any repo containing .claude-plugin/ — never use manual git tags or gh release for plugins.
+============================================================
+Train: 18/33 correct, precision=100% recall=0% accuracy=55% (191.4s)
+  [FAIL] rate=0/3 expected=True: push a release -- I want to version bump plugin-ops and depl
+  [FAIL] rate=0/3 expected=True: bump the version of my plugin and create a release -- I fixe
+  [FAIL] rate=0/3 expected=True: publish a new version of my plugin -- patch bump for the mar
+  [FAIL] rate=0/3 expected=True: release plugin-ops -- its ready for a new version, bump and 
+  [FAIL] rate=0/3 expected=True: ship it -- version 2.0.0 of the beads plugin, tag and push t
+  [PASS] rate=0/3 expected=False: analyze my plugin health and write findings to REFLECTIONS.m
+  [PASS] rate=0/3 expected=False: add my plugin to the marketplace so people can install it
+  [PASS] rate=0/3 expected=False: create a github release with release notes for the latest ta
+  [PASS] rate=0/3 expected=False: publish my npm package to the registry
+  [PASS] rate=0/3 expected=False: update the version in package.json to 2.0.0
+  [PASS] rate=0/3 expected=False: why isnt my skill triggering? debug the plugin for me
+Test : 12/21 correct, precision=100% recall=0% accuracy=57% (0.0s)
+  [FAIL] rate=0/3 expected=True: do a dry-run release of plugin-ops 1.9.0 -- I want to see wh
+  [FAIL] rate=0/3 expected=True: release this -- tag v3.1.0 and push. its a minor release wit
+  [FAIL] rate=0/3 expected=True: commit and release my plugin changes as version 1.2.0
+  [PASS] rate=0/3 expected=False: tag the current commit as v1.0.0 in git
+  [PASS] rate=0/3 expected=False: slim down my plugin -- the knowledge files are too big
+  [PASS] rate=0/3 expected=False: deploy my docker container to the staging environment
+  [PASS] rate=0/3 expected=False: commit all my changes and push to the remote branch
+
+Improving description...
+Proposed (51.5s): Release a Claude Code plugin — bump its version, commit, push, and tag. Use whenever the user wants to release, version-bump, ship, or publish a plugin (any project with a .claude-plugin/ directory). Covers phrases like "release my plugin", "bump plugin version", "ship it", "publish a new version", "deploy update", "push a release", "tag and push". This is the canonical plugin release workflow — do NOT use manual git tags, gh release, or npm publish for Claude Code plugins. Not for: npm registry publishing, GitHub Releases with release notes, marketplace listing, or editing package.json versions directly.
+
+============================================================
+Iteration 2/5
+Description: Release a Claude Code plugin — bump its version, commit, push, and tag. Use whenever the user wants to release, version-bump, ship, or publish a plugin (any project with a .claude-plugin/ directory). Covers phrases like "release my plugin", "bump plugin version", "ship it", "publish a new version", "deploy update", "push a release", "tag and push". This is the canonical plugin release workflow — do NOT use manual git tags, gh release, or npm publish for Claude Code plugins. Not for: npm registry publishing, GitHub Releases with release notes, marketplace listing, or editing package.json versions directly.
+============================================================
+Train: 18/33 correct, precision=100% recall=0% accuracy=55% (182.0s)
+  [FAIL] rate=0/3 expected=True: push a release -- I want to version bump plugin-ops and depl
+  [FAIL] rate=0/3 expected=True: bump the version of my plugin and create a release -- I fixe
+  [FAIL] rate=0/3 expected=True: publish a new version of my plugin -- patch bump for the mar
+  [FAIL] rate=0/3 expected=True: release plugin-ops -- its ready for a new version, bump and 
+  [FAIL] rate=0/3 expected=True: ship it -- version 2.0.0 of the beads plugin, tag and push t
+  [PASS] rate=0/3 expected=False: analyze my plugin health and write findings to REFLECTIONS.m
+  [PASS] rate=0/3 expected=False: add my plugin to the marketplace so people can install it
+  [PASS] rate=0/3 expected=False: create a github release with release notes for the latest ta
+  [PASS] rate=0/3 expected=False: update the version in package.json to 2.0.0
+  [PASS] rate=0/3 expected=False: publish my npm package to the registry
+  [PASS] rate=0/3 expected=False: why isnt my skill triggering? debug the plugin for me
+Test : 12/21 correct, precision=100% recall=0% accuracy=57% (0.0s)
+  [FAIL] rate=0/3 expected=True: do a dry-run release of plugin-ops 1.9.0 -- I want to see wh
+  [FAIL] rate=0/3 expected=True: release this -- tag v3.1.0 and push. its a minor release wit
+  [FAIL] rate=0/3 expected=True: commit and release my plugin changes as version 1.2.0
+  [PASS] rate=0/3 expected=False: tag the current commit as v1.0.0 in git
+  [PASS] rate=0/3 expected=False: slim down my plugin -- the knowledge files are too big
+  [PASS] rate=0/3 expected=False: deploy my docker container to the staging environment
+  [PASS] rate=0/3 expected=False: commit all my changes and push to the remote branch
+
+Improving description...
+Traceback (most recent call last):
+  File "/Users/ivintik/.pyenv/versions/3.10.15/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/Users/ivintik/.pyenv/versions/3.10.15/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/Users/ivintik/.claude/plugins/cache/claude-plugins-official/skill-creator/205b6e0b3036/skills/skill-creator/scripts/run_loop.py", line 332, in <module>
+    main()
+  File "/Users/ivintik/.claude/plugins/cache/claude-plugins-official/skill-creator/205b6e0b3036/skills/skill-creator/scripts/run_loop.py", line 297, in main
+    output = run_loop(
+  File "/Users/ivintik/.claude/plugins/cache/claude-plugins-official/skill-creator/205b6e0b3036/skills/skill-creator/scripts/run_loop.py", line 202, in run_loop
+    new_description = improve_description(
+  File "/Users/ivintik/.claude/plugins/cache/claude-plugins-official/skill-creator/205b6e0b3036/skills/skill-creator/scripts/improve_description.py", line 134, in improve_description
+    text = _call_claude(prompt, model)
+  File "/Users/ivintik/.claude/plugins/cache/claude-plugins-official/skill-creator/205b6e0b3036/skills/skill-creator/scripts/improve_description.py", line 27, in _call_claude
+    result = subprocess.run(
+  File "/Users/ivintik/.pyenv/versions/3.10.15/lib/python3.10/subprocess.py", line 505, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+  File "/Users/ivintik/.pyenv/versions/3.10.15/lib/python3.10/subprocess.py", line 1154, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+  File "/Users/ivintik/.pyenv/versions/3.10.15/lib/python3.10/subprocess.py", line 2022, in _communicate
+    self._check_timeout(endtime, orig_timeout, stdout, stderr)
+  File "/Users/ivintik/.pyenv/versions/3.10.15/lib/python3.10/subprocess.py", line 1198, in _check_timeout
+    raise TimeoutExpired(
+subprocess.TimeoutExpired: Command '['claude', '-p', 'You are optimizing a skill description for a Claude Code skill called "release". A "skill" is sort of like a prompt, but with progressive disclosure -- there\'s a title and description that Claude sees when deciding whether to use the skill, and then if it does use the skill, it reads the .md file which has lots more details and potentially links to other resources in the skill folder like helper files and scripts and additional documentation or examples.\n\nThe description appears in Claude\'s "available_skills" list. When a user sends a query, Claude decides whether to invoke the skill based solely on the title and on this description. Your goal is to write a description that triggers for relevant queries, and doesn\'t trigger for irrelevant ones.\n\nHere\'s the current description:\n<current_description>\n"Release a Claude Code plugin — bump its version, commit, push, and tag. Use whenever the user wants to release, version-bump, ship, or publish a plugin (any project with a .claude-plugin/ directory). Covers phrases like "release my plugin", "bump plugin version", "ship it", "publish a new version", "deploy update", "push a release", "tag and push". This is the canonical plugin release workflow — do NOT use manual git tags, gh release, or npm publish for Claude Code plugins. Not for: npm registry publishing, GitHub Releases with release notes, marketplace listing, or editing package.json versions directly."\n</current_description>\n\nCurrent scores (Train: 6/11):\n<scores_summary>\nFAILED TO TRIGGER (should have triggered but didn\'t):\n  - "push a release -- I want to version bump plugin-ops and deploy the update" (triggered 0/3 times)\n  - "bump the version of my plugin and create a release -- I fixed a bunch of bugs" (triggered 0/3 times)\n  - "publish a new version of my plugin -- patch bump for the marketplace.json path fix" (triggered 0/3 times)\n  - "release plugin-ops -- its ready for a new version, bump and push" (triggered 0/3 times)\n  - "ship it -- version 2.0.0 of the beads plugin, tag and push to origin" (triggered 0/3 times)\n\nPREVIOUS ATTEMPTS (do NOT repeat these — try something structurally different):\n\n<attempt train=6/11>\nDescription: "Bump plugin version, commit, push, and tag a release. Use when the user asks to \\"release\\", \\"bump version\\", \\"publish\\", \\"deploy update\\", \\"tag a release\\", \\"ship it\\", \\"push a release\\", or says \\"release this\\". This is the ONLY correct way to release any repo containing .claude-plugin/ — never use manual git tags or gh release for plugins."\nTrain results:\n  [FAIL] "push a release -- I want to version bump plugin-ops and deploy the update" (triggered 0/3)\n  [FAIL] "bump the version of my plugin and create a release -- I fixed a bunch of bugs" (triggered 0/3)\n  [FAIL] "publish a new version of my plugin -- patch bump for the marketplace.json path f" (triggered 0/3)\n  [FAIL] "release plugin-ops -- its ready for a new version, bump and push" (triggered 0/3)\n  [FAIL] "ship it -- version 2.0.0 of the beads plugin, tag and push to origin" (triggered 0/3)\n  [PASS] "analyze my plugin health and write findings to REFLECTIONS.md" (triggered 0/3)\n  [PASS] "add my plugin to the marketplace so people can install it" (triggered 0/3)\n  [PASS] "create a github release with release notes for the latest tag" (triggered 0/3)\n  [PASS] "publish my npm package to the registry" (triggered 0/3)\n  [PASS] "update the version in package.json to 2.0.0" (triggered 0/3)\n  [PASS] "why isnt my skill triggering? debug the plugin for me" (triggered 0/3)\n</attempt>\n\n<attempt train=6/11>\nDescription: "Release a Claude Code plugin — bump its version, commit, push, and tag. Use whenever the user wants to release, version-bump, ship, or publish a plugin (any project with a .claude-plugin/ directory). Covers phrases like "release my plugin", "bump plugin version", "ship it", "publish a new version", "deploy update", "push a release", "tag and push". This is the canonical plugin release workflow — do NOT use manual git tags, gh release, or npm publish for Claude Code plugins. Not for: npm registry publishing, GitHub Releases with release notes, marketplace listing, or editing package.json versions directly."\nTrain results:\n  [FAIL] "push a release -- I want to version bump plugin-ops and deploy the update" (triggered 0/3)\n  [FAIL] "bump the version of my plugin and create a release -- I fixed a bunch of bugs" (triggered 0/3)\n  [FAIL] "publish a new version of my plugin -- patch bump for the marketplace.json path f" (triggered 0/3)\n  [FAIL] "release plugin-ops -- its ready for a new version, bump and push" (triggered 0/3)\n  [FAIL] "ship it -- version 2.0.0 of the beads plugin, tag and push to origin" (triggered 0/3)\n  [PASS] "analyze my plugin health and write findings to REFLECTIONS.md" (triggered 0/3)\n  [PASS] "add my plugin to the marketplace so people can install it" (triggered 0/3)\n  [PASS] "create a github release with release notes for the latest tag" (triggered 0/3)\n  [PASS] "update the version in package.json to 2.0.0" (triggered 0/3)\n  [PASS] "publish my npm package to the registry" (triggered 0/3)\n  [PASS] "why isnt my skill triggering? debug the plugin for me" (triggered 0/3)\n</attempt>\n\n</scores_summary>\n\nSkill content (for context on what the skill does):\n<skill_content>\n---\nname: release\ndescription: "Bump plugin version, commit, push, and tag a release. Use when the user asks to \\"release\\", \\"bump version\\", \\"publish\\", \\"deploy update\\", \\"tag a release\\", \\"ship it\\", \\"push a release\\", or says \\"release this\\". This is the ONLY correct way to release any repo containing .claude-plugin/ — never use manual git tags or gh release for plugins."\nargument-hint: "[plugin-path] [version] [--dry-run] [--no-tag]"\n---\n\n# Plugin Release\n\nVersion bump, commit, push, and create a git tag. If CI is configured, the tag triggers automated marketplace updates.\n\n## Parse Arguments\n\nParse `$ARGUMENTS`:\n- **First positional**: Path to plugin directory (default: current directory).\n- **Version**: semver string like `1.2.0` (optional — prompts if missing).\n- `--dry-run`: Show what would happen without changes.\n- `--no-tag`: Skip git tag creation.\n\n## Get Version (if not provided)\n\n```bash\npython3 ${CLAUDE_PLUGIN_ROOT}/scripts/release.py <PLUGIN_PATH> --suggest\n```\n\nReturns JSON: `{"current": "1.1.0", "patch": "1.1.1", "minor": "1.2.0", "major": "2.0.0"}`.\nPresent options to the user via `AskUserQuestion`.\n\n## Execute Release\n\n```bash\npython3 ${CLAUDE_PLUGIN_ROOT}/scripts/release.py <PLUGIN_PATH> <VERSION> [--dry-run] [--no-tag]\n```\n\n## Handle Result\n\n**Success (exit 0):**\n1. Show: `Released {plugin} v{new_version} (was v{old_version})`\n2. If `update_command` present: show the command for user to run manually\n3. If `update_command` null: show `claude plugin update <name>@<marketplace>`\n4. If `mcp_pids` non-empty: warn about stale MCP processes to kill\n5. Tell user: "After updating, start a new Claude Code session to load the new version."\n\n**Error (exit 1/2):** Display error from JSON `error` field, suggest fixes.\n\n**IMPORTANT:** Never run `claude plugin install/update` from within a session — these hang. Show commands for the user to run manually.\n\n</skill_content>\n\nBased on the failures, write a new and improved description that is more likely to trigger correctly. When I say "based on the failures", it\'s a bit of a tricky line to walk because we don\'t want to overfit to the specific cases you\'re seeing. So what I DON\'T want you to do is produce an ever-expanding list of specific queries that this skill should or shouldn\'t trigger for. Instead, try to generalize from the failures to broader categories of user intent and situations where this skill would be useful or not useful.\n\nConcretely, your description should not be more than about 100-200 words, even if that comes at the cost of accuracy.\n\nTips:\n- Phrase in the imperative -- "Use this skill for" rather than "this skill does"\n- Focus on user intent vs implementation details\n- Make it distinctive among competing skills\n- If repeated attempts fail, try structurally different approaches\n\nPlease respond with only the new description text in <new_description> tags, nothing else.', '--output-format', 'json', '--model', 'claude-opus-4-6']' timed out after 120 seconds

@@ -71,13 +71,6 @@ Report: file count, total size, largest file.
 - [ ] CLAUDE.md consistent with actual structure
 - [ ] README.md lists all skills
 
-### 7. Issues Integration
-
-If ISSUES.md exists:
-- [ ] Count open vs resolved
-- [ ] Check if resolved issues might have regressed
-- [ ] Identify patterns in open issues
-
 ## Output
 
 Write findings to REFLECTIONS.md in the plugin, then return summary:
@@ -93,15 +86,11 @@ Write findings to REFLECTIONS.md in the plugin, then return summary:
 | Hooks | present/absent | ... |
 | MCP | present/absent | ... |
 | Cross-refs | N broken | ... |
-| Issues | N open, M resolved | ... |
 
 ### Top Improvement Opportunities
 1. ...
 2. ...
 3. ...
-
-### Issues Discovered
-- ISSUE-NNN: ... (if critical/major findings)
 
 Full analysis written to REFLECTIONS.md
 ```

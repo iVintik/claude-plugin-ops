@@ -1,0 +1,87 @@
+{
+  "skill_name": "issues",
+  "evals": [
+    {
+      "id": 1,
+      "name": "list-issues",
+      "prompt": "Can you check what issues are tracked for the plugin-ops plugin? I want to see what's open before I start working on it. The plugin source is at /Users/ivintik/dev/personal/tools/claude-plugin-ops",
+      "expected_output": "Reads ISSUES.md and displays a summary table of issues with ID, status, severity, and title. If no ISSUES.md exists, offers to initialize one.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "reads-issues-md",
+          "text": "reads-or-locates-ISSUES.md",
+          "description": "Attempts to read ISSUES.md at the plugin root, or checks if it exists"
+        },
+        {
+          "id": "uses-correct-path",
+          "text": "uses-correct-plugin-path",
+          "description": "Uses /Users/ivintik/dev/personal/tools/claude-plugin-ops (not cache path)"
+        },
+        {
+          "id": "no-cache-path",
+          "text": "no-cache-path-access",
+          "description": "Does NOT read from ~/.claude/plugins/cache/"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "add-issue",
+      "prompt": "While auditing the plugin-ops plugin at /Users/ivintik/dev/personal/tools/claude-plugin-ops, I noticed that the optimize skill doesn't handle plugins with no skills directory — it crashes with a KeyError. Log this as a bug.",
+      "expected_output": "Adds a new issue to ISSUES.md with title about optimize skill crashing on missing skills dir, severity major or critical, and correct ISSUE-NNN format.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "creates-or-updates-issues-md",
+          "text": "creates-or-updates-ISSUES.md",
+          "description": "Writes a new issue entry to ISSUES.md (creates file if missing)"
+        },
+        {
+          "id": "correct-format",
+          "text": "correct-issue-format",
+          "description": "Issue has Status, Severity, Found date, Description fields in ISSUE-NNN format"
+        },
+        {
+          "id": "no-prompting",
+          "text": "no-unnecessary-prompting",
+          "description": "Does not ask user for fields already clear from the prompt (title and description are inferable)"
+        },
+        {
+          "id": "no-cache-path",
+          "text": "no-cache-path-access",
+          "description": "Does NOT write to ~/.claude/plugins/cache/"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "resolve-issue",
+      "prompt": "I just fixed ISSUE-001 in the plugin-ops plugin — the reflect skill was skipping hooks when the hooks dir didn't exist. I added a guard for that. Mark it resolved. Plugin is at /Users/ivintik/dev/personal/tools/claude-plugin-ops",
+      "expected_output": "Finds ISSUE-001 in ISSUES.md, updates status to resolved, sets resolved date, and records the resolution description from the user's message.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "finds-correct-issue",
+          "text": "finds-ISSUE-001",
+          "description": "Locates and reads ISSUE-001 from ISSUES.md"
+        },
+        {
+          "id": "updates-status",
+          "text": "updates-status-to-resolved",
+          "description": "Changes status field to resolved"
+        },
+        {
+          "id": "records-resolution",
+          "text": "records-resolution-description",
+          "description": "Sets Resolution field with description of the fix"
+        },
+        {
+          "id": "no-cache-path",
+          "text": "no-cache-path-access",
+          "description": "Does NOT write to ~/.claude/plugins/cache/"
+        }
+      ]
+    }
+  ]
+}

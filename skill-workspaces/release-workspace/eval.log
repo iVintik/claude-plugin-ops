@@ -1,0 +1,156 @@
+=== release ===
+{
+  "skill_name": "release",
+  "description": "Release a Claude Code plugin \u2014 bump its version, commit, push, and tag. Use whenever the user wants to release, version-bump, ship, or publish a plugin (any project with a .claude-plugin/ directory). Covers phrases like \\\"release my plugin\\\", \\\"bump plugin version\\\", \\\"ship it\\\", \\\"publish a new version\\\", \\\"deploy update\\\", \\\"push a release\\\", \\\"tag and push\\\". This is the canonical plugin release workflow \u2014 do NOT use manual git tags, gh release, or npm publish for Claude Code plugins. Not for: npm registry publishing, GitHub Releases with release notes, marketplace listing, or editing package.json versions directly.",
+  "results": [
+    {
+      "query": "release plugin-ops -- its ready for a new version, bump and push",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "ship it -- version 2.0.0 of the beads plugin, tag and push to origin",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "bump the version of my plugin and create a release -- I fixed a bunch of bugs",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "do a dry-run release of plugin-ops 1.9.0 -- I want to see what would happen without actually changing anything",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "release this -- tag v3.1.0 and push. its a minor release with the new optimize skill",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "publish a new version of my plugin -- patch bump for the marketplace.json path fix",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "commit and release my plugin changes as version 1.2.0",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "push a release -- I want to version bump plugin-ops and deploy the update",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "analyze my plugin health and write findings to REFLECTIONS.md",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "why isnt my skill triggering? debug the plugin for me",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "slim down my plugin -- the knowledge files are too big",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "add my plugin to the marketplace so people can install it",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "create a github release with release notes for the latest tag",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "deploy my docker container to the staging environment",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "commit all my changes and push to the remote branch",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "tag the current commit as v1.0.0 in git",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "publish my npm package to the registry",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "update the version in package.json to 2.0.0",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 18,
+    "passed": 10,
+    "failed": 8
+  }
+}

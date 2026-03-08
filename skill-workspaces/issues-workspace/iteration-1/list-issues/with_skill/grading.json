@@ -1,0 +1,26 @@
+{
+  "eval_id": 1,
+  "eval_name": "list-issues",
+  "configuration": "with_skill",
+  "expectations": [
+    {
+      "text": "reads-or-locates-ISSUES.md",
+      "passed": true,
+      "evidence": "Checked for ISSUES.md at plugin root, correctly reported not found and suggested --init"
+    },
+    {
+      "text": "uses-correct-plugin-path",
+      "passed": true,
+      "evidence": "Used /Users/ivintik/dev/personal/tools/claude-plugin-ops throughout"
+    },
+    {
+      "text": "no-cache-path-access",
+      "passed": true,
+      "evidence": "No cache path referenced in output or tool calls"
+    }
+  ],
+  "pass_rate": 1.0,
+  "passed": 3,
+  "failed": 0,
+  "total": 3
+}

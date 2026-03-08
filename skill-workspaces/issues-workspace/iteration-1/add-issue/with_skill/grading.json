@@ -1,0 +1,31 @@
+{
+  "eval_id": 2,
+  "eval_name": "add-issue",
+  "configuration": "with_skill",
+  "expectations": [
+    {
+      "text": "creates-or-updates-ISSUES.md",
+      "passed": true,
+      "evidence": "Created ISSUES.md with ISSUE-001 in correct location (temp copy)"
+    },
+    {
+      "text": "correct-issue-format",
+      "passed": true,
+      "evidence": "Has all required fields: Status, Severity, Found, Resolved (—), Context, Description, Resolution (—), Notes. Includes header comment. ISSUE-001 format correct."
+    },
+    {
+      "text": "no-unnecessary-prompting",
+      "passed": true,
+      "evidence": "Wrote issue directly — title, severity (major), context, and description all inferred from user message. No prompts."
+    },
+    {
+      "text": "no-cache-path-access",
+      "passed": true,
+      "evidence": "Operated on /tmp/plugin-ops-test-add-with/ temp copy, not cache"
+    }
+  ],
+  "pass_rate": 1.0,
+  "passed": 4,
+  "failed": 0,
+  "total": 4
+}

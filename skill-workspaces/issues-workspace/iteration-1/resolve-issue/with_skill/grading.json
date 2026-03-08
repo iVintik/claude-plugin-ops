@@ -1,0 +1,31 @@
+{
+  "eval_id": 3,
+  "eval_name": "resolve-issue",
+  "configuration": "with_skill",
+  "expectations": [
+    {
+      "text": "finds-ISSUE-001",
+      "passed": true,
+      "evidence": "Located ISSUE-001 in temp ISSUES.md and updated it"
+    },
+    {
+      "text": "updates-status-to-resolved",
+      "passed": true,
+      "evidence": "Status field changed from 'open' to 'resolved'"
+    },
+    {
+      "text": "records-resolution-description",
+      "passed": true,
+      "evidence": "Resolution field set to: 'Added a guard in the reflect skill to check whether the hooks/ directory exists before attempting to scan it. The skill now skips the hooks scan gracefully when the directory is absent.'"
+    },
+    {
+      "text": "no-cache-path-access",
+      "passed": true,
+      "evidence": "Operated on /tmp/plugin-ops-test-resolve-with/ temp copy"
+    }
+  ],
+  "pass_rate": 1.0,
+  "passed": 4,
+  "failed": 0,
+  "total": 4
+}

@@ -1,0 +1,156 @@
+=== reflect ===
+{
+  "skill_name": "reflect",
+  "description": "Run a comprehensive health audit on a Claude Code plugin \u2014 checks structure, skills quality, knowledge size, hooks, MCP config, and cross-references. Use when the user asks to \\\"analyze plugin health\\\", \\\"audit plugin\\\", \\\"assess plugin quality\\\", \\\"review plugin structure\\\", \\\"run self-assessment\\\", \\\"how healthy is this plugin\\\", \\\"health check\\\", \\\"is this plugin any good\\\", or \\\"check if my plugin is correct\\\". Also trigger proactively after significant plugin changes (new skills, hook changes, MCP updates) to catch regressions before release. Does NOT cover: debugging specific failures (use diagnose), reducing plugin size (use optimize), or releasing new versions (use release).",
+  "results": [
+    {
+      "query": "I just finished a big overhaul on my atlas plugin -- rewrote 3 skills and added a new agent. can you do a health check on it before I release?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "how healthy is plugin-ops? I havent looked at it in a while and want to make sure nothing is broken",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "audit the beads plugin at ~/dev/tools/beads -- I want to know if the knowledge files are too big and if the skills have good trigger phrases",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "run a self-assessment on my famdeck-toolkit, its been through a lot of changes lately",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "I want a full quality report on this plugin before shipping it to the team",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "check if my plugin structure is correct -- does it have all the required files?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "is this plugin any good? give me an honest assessment of its skills, knowledge files, and overall quality",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "review my plugin after I made changes to the hooks and added a new MCP server",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "my beads list command isnt working when I say 'show me open issues' -- can you figure out why?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "I need to slim down my plugin, the knowledge files are way too big -- can you help me reduce them?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "create a new plugin for managing docker containers with skills for build, run, and deploy",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "release plugin-ops version 2.0.0 -- bump the version and push",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "review this pull request on github -- check the code quality and leave comments",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "add my plugin to the marketplace so other people can install it",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "can you look at my tsconfig.json and tell me if my typescript configuration is correct?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "I need to validate that my helm chart values match the uniform-service pattern -- can you check?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "write a SKILL.md for a new 'deploy' skill that handles kubernetes deployments",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "run the test suite for my python project and tell me what failed",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 18,
+    "passed": 10,
+    "failed": 8
+  }
+}

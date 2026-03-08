@@ -1,0 +1,10 @@
+{
+  "eval_id": 1,
+  "eval_name": "list-issues",
+  "prompt": "Can you check what issues are tracked for the plugin-ops plugin? I want to see what's open before I start working on it. The plugin source is at /Users/ivintik/dev/personal/tools/claude-plugin-ops",
+  "assertions": [
+    {"id": "reads-issues-md", "text": "reads-or-locates-ISSUES.md"},
+    {"id": "uses-correct-path", "text": "uses-correct-plugin-path"},
+    {"id": "no-cache-path", "text": "no-cache-path-access"}
+  ]
+}

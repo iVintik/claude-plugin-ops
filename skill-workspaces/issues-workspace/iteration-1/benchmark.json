@@ -1,0 +1,167 @@
+{
+  "metadata": {
+    "skill_name": "issues",
+    "skill_path": "/Users/ivintik/dev/personal/tools/claude-plugin-ops/skills/issues",
+    "executor_model": "claude-sonnet-4-6",
+    "analyzer_model": "claude-sonnet-4-6",
+    "timestamp": "2026-03-08T21:00:00Z",
+    "evals_run": ["list-issues", "add-issue", "resolve-issue"],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "list-issues",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 26.7,
+        "tokens": 18721,
+        "tool_calls": 6,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "reads-or-locates-ISSUES.md", "passed": true, "evidence": "Checked for ISSUES.md at plugin root, correctly reported not found and suggested --init"},
+        {"text": "uses-correct-plugin-path", "passed": true, "evidence": "Used /Users/ivintik/dev/personal/tools/claude-plugin-ops throughout"},
+        {"text": "no-cache-path-access", "passed": true, "evidence": "No cache path referenced in output or tool calls"}
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "list-issues",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.67,
+        "passed": 2,
+        "failed": 1,
+        "total": 3,
+        "time_seconds": 84.2,
+        "tokens": 29508,
+        "tool_calls": 24,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "reads-or-locates-ISSUES.md", "passed": false, "evidence": "Never looked for ISSUES.md — checked GitHub Issues (gh CLI) and Beads (bd CLI) instead. 24 tool calls to find no open issues in the wrong trackers."},
+        {"text": "uses-correct-plugin-path", "passed": true, "evidence": "Used /Users/ivintik/dev/personal/tools/claude-plugin-ops correctly"},
+        {"text": "no-cache-path-access", "passed": true, "evidence": "No cache path referenced"}
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "add-issue",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 55.0,
+        "tokens": 19980,
+        "tool_calls": 11,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "creates-or-updates-ISSUES.md", "passed": true, "evidence": "Created ISSUES.md with ISSUE-001 in correct location (temp copy)"},
+        {"text": "correct-issue-format", "passed": true, "evidence": "Has all required fields: Status, Severity, Found, Resolved (—), Context, Description, Resolution (—), Notes. Includes header comment."},
+        {"text": "no-unnecessary-prompting", "passed": true, "evidence": "Wrote issue directly — title, severity, context, and description all inferred. No prompts."},
+        {"text": "no-cache-path-access", "passed": true, "evidence": "Operated on /tmp/plugin-ops-test-add-with/ temp copy, not cache"}
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "add-issue",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 3,
+        "failed": 1,
+        "total": 4,
+        "time_seconds": 85.6,
+        "tokens": 27081,
+        "tool_calls": 22,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "creates-or-updates-ISSUES.md", "passed": true, "evidence": "Added ISSUE-002 to a temp ISSUES.md (copied from another workspace output)"},
+        {"text": "correct-issue-format", "passed": false, "evidence": "Missing '—' placeholder for empty Resolved/Resolution fields (left blank). Missing header comment. Format deviates from ISSUE-NNN template."},
+        {"text": "no-unnecessary-prompting", "passed": true, "evidence": "Wrote the issue directly without asking user for any fields"},
+        {"text": "no-cache-path-access", "passed": true, "evidence": "Used /tmp/plugin-ops-test-add-without/ temp copy"}
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "resolve-issue",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 42.4,
+        "tokens": 19551,
+        "tool_calls": 8,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "finds-ISSUE-001", "passed": true, "evidence": "Located ISSUE-001 in temp ISSUES.md and updated it"},
+        {"text": "updates-status-to-resolved", "passed": true, "evidence": "Status field changed from 'open' to 'resolved'"},
+        {"text": "records-resolution-description", "passed": true, "evidence": "Resolution field set with detailed description of the fix"},
+        {"text": "no-cache-path-access", "passed": true, "evidence": "Operated on /tmp/plugin-ops-test-resolve-with/ temp copy"}
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "resolve-issue",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 22.8,
+        "tokens": 16946,
+        "tool_calls": 5,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "finds-ISSUE-001", "passed": true, "evidence": "Located ISSUE-001 and updated it correctly"},
+        {"text": "updates-status-to-resolved", "passed": true, "evidence": "Status changed from 'open' to 'resolved', Resolved date set to 2026-03-08"},
+        {"text": "records-resolution-description", "passed": true, "evidence": "Resolution field set: 'Added a guard to check if hooks/ dir exists before scanning it.'"},
+        {"text": "no-cache-path-access", "passed": true, "evidence": "Operated on /tmp/plugin-ops-test-resolve-without/ temp copy"}
+      ]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0},
+      "time_seconds": {"mean": 41.4, "stddev": 14.2, "min": 26.7, "max": 55.0},
+      "tokens": {"mean": 19417, "stddev": 617, "min": 18721, "max": 19980}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.81, "stddev": 0.17, "min": 0.67, "max": 1.0},
+      "time_seconds": {"mean": 64.2, "stddev": 35.8, "min": 22.8, "max": 85.6},
+      "tokens": {"mean": 24512, "stddev": 6543, "min": 16946, "max": 29508}
+    },
+    "delta": {
+      "pass_rate": "+0.19",
+      "time_seconds": "-22.8",
+      "tokens": "-5095"
+    }
+  },
+  "notes": [
+    "Key win: list-issues — skill correctly targets ISSUES.md; baseline searched GitHub Issues + Beads (24 tool calls), completely missing the ISSUES.md concept",
+    "add-issue: skill produces correct format with header comment and dash placeholders; baseline deviates on empty field format",
+    "resolve-issue: both succeed; baseline actually faster (fewer tool calls, no skill preamble overhead)",
+    "Skill consistently uses fewer tool calls on list and add (6 vs 24, 11 vs 22) — guidance eliminates tracker exploration overhead",
+    "resolve-issue is weakest discriminator — both pass all assertions, baseline is faster"
+  ]
+}

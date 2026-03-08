@@ -1,0 +1,11 @@
+{
+  "eval_id": 2,
+  "eval_name": "add-issue",
+  "prompt": "While auditing the plugin-ops plugin at /Users/ivintik/dev/personal/tools/claude-plugin-ops, I noticed that the optimize skill doesn't handle plugins with no skills directory — it crashes with a KeyError. Log this as a bug.",
+  "assertions": [
+    {"id": "creates-or-updates-issues-md", "text": "creates-or-updates-ISSUES.md"},
+    {"id": "correct-format", "text": "correct-issue-format"},
+    {"id": "no-prompting", "text": "no-unnecessary-prompting"},
+    {"id": "no-cache-path", "text": "no-cache-path-access"}
+  ]
+}

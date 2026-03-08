@@ -1,6 +1,6 @@
 ---
 name: release
-description: "Bump plugin version, commit, push, and tag a release. Use when the user asks to \"release\", \"bump version\", \"publish\", \"deploy update\", \"tag a release\", \"ship it\", \"push a release\", or says \"release this\". This is the ONLY correct way to release any repo containing .claude-plugin/ — never use manual git tags or gh release for plugins."
+description: "Release a Claude Code plugin — bump its version, commit, push, and tag. Use whenever the user wants to release, version-bump, ship, or publish a plugin (any project with a .claude-plugin/ directory). Covers phrases like \"release my plugin\", \"bump plugin version\", \"ship it\", \"publish a new version\", \"deploy update\", \"push a release\", \"tag and push\". This is the canonical plugin release workflow — do NOT use manual git tags, gh release, or npm publish for Claude Code plugins. Not for: npm registry publishing, GitHub Releases with release notes, marketplace listing, or editing package.json versions directly."
 argument-hint: "[plugin-path] [version] [--dry-run] [--no-tag]"
 ---
 

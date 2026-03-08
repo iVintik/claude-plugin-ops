@@ -1,0 +1,20 @@
+[
+  {"query": "release plugin-ops -- its ready for a new version, bump and push", "should_trigger": true},
+  {"query": "ship it -- version 2.0.0 of the beads plugin, tag and push to origin", "should_trigger": true},
+  {"query": "bump the version of my plugin and create a release -- I fixed a bunch of bugs", "should_trigger": true},
+  {"query": "do a dry-run release of plugin-ops 1.9.0 -- I want to see what would happen without actually changing anything", "should_trigger": true},
+  {"query": "release this -- tag v3.1.0 and push. its a minor release with the new optimize skill", "should_trigger": true},
+  {"query": "publish a new version of my plugin -- patch bump for the marketplace.json path fix", "should_trigger": true},
+  {"query": "commit and release my plugin changes as version 1.2.0", "should_trigger": true},
+  {"query": "push a release -- I want to version bump plugin-ops and deploy the update", "should_trigger": true},
+  {"query": "analyze my plugin health and write findings to REFLECTIONS.md", "should_trigger": false},
+  {"query": "why isnt my skill triggering? debug the plugin for me", "should_trigger": false},
+  {"query": "slim down my plugin -- the knowledge files are too big", "should_trigger": false},
+  {"query": "add my plugin to the marketplace so people can install it", "should_trigger": false},
+  {"query": "create a github release with release notes for the latest tag", "should_trigger": false},
+  {"query": "deploy my docker container to the staging environment", "should_trigger": false},
+  {"query": "commit all my changes and push to the remote branch", "should_trigger": false},
+  {"query": "tag the current commit as v1.0.0 in git", "should_trigger": false},
+  {"query": "publish my npm package to the registry", "should_trigger": false},
+  {"query": "update the version in package.json to 2.0.0", "should_trigger": false}
+]

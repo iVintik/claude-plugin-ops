@@ -1,0 +1,8 @@
+Bug logged: ISSUE-002
+
+Added ISSUE-002 to ISSUES.md:
+- Title: optimize skill crashes with KeyError on plugins with no skills directory
+- Status: open
+- Severity: major
+- Found: 2026-03-08
+- Description: The optimize skill crashes with a KeyError when run against a plugin that has no skills/ directory. The skill attempts to access skills-related data without first checking whether the directory exists, causing an unhandled exception.

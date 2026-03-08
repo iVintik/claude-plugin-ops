@@ -1,6 +1,6 @@
 ---
 name: issues
-description: "View, add, update, or resolve issues in a plugin's ISSUES.md. Use when the user asks to \"log an issue\", \"track a bug\", \"note this problem\", \"report a plugin issue\", \"list plugin issues\", \"resolve an issue\", \"update issue status\", \"what issues are open\", or any form of plugin issue management. Also trigger proactively when you discover a defect during plugin work — file it immediately."
+description: "Track bugs and problems in a local ISSUES.md file. Use when the user wants to log, note, or record a problem for later — not fix it now. Also use for: listing what's currently tracked, marking an ISSUE-NNN as resolved, or updating issue status. Key triggers: \"log it\", \"note it somewhere\", \"what issues are we tracking\", \"mark ISSUE-NNN as resolved\", reporting a problem with no immediate action requested. Do NOT trigger when the user wants to actively fix, debug, investigate, optimize, or audit something, or when they ask to create a relay handoff or open a GitHub/Jira ticket. This skill is for lightweight documentation of known problems — record now, fix later."
 argument-hint: "[plugin-path] [--add] [--resolve ISSUE-NNN] [--update ISSUE-NNN] [--list] [--init]"
 ---
 

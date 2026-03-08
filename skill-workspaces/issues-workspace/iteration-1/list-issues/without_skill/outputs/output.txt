@@ -1,0 +1,29 @@
+## Task: List Open Issues for claude-plugin-ops
+
+### What was done
+
+1. Identified the project at /Users/ivintik/dev/personal/tools/claude-plugin-ops
+2. Checked GitHub remote: https://github.com/iVintik/claude-plugin-ops.git
+3. Ran `gh issue list --state open` — returned no issues (GitHub Issues not used)
+4. Identified the local issue tracker: Beads (bd CLI v0.56.1) via .beads/ directory
+5. Ran `bd list --json` (open issues only) — returned empty array []
+6. Ran `bd list --all --json` (all issues including closed) — found 3 issues, all closed
+
+### Result: No Open Issues
+
+There are currently **0 open issues** in the claude-plugin-ops plugin.
+
+### All Tracked Issues (Closed)
+
+| ID | Title | Status | Priority | Closed Reason |
+|----|-------|--------|----------|---------------|
+| claude-plugin-ops-wms | Convert reflect skill to a plugin-auditor subagent | closed | P2 | Implemented agents/plugin-auditor.md — haiku, maxTurns 15, 7-category comprehensive plugin health audit |
+| claude-plugin-ops-qz9 | Convert diagnose skill to a plugin-diagnostician subagent | closed | P2 | Implemented agents/plugin-diagnostician.md — sonnet, maxTurns 12, read-only root-cause analysis of plugin failures |
+| claude-plugin-ops-iz5 | Convert optimize skill to a plugin-optimizer subagent | closed | P3 | Implemented agents/plugin-optimizer.md — sonnet, maxTurns 15, dry-run analysis with non-regression protocol |
+
+### Issue Tracker Details
+
+- **Tracker:** Beads (bd CLI), local database at .beads/
+- **GitHub Issues:** Not used (empty)
+- **Open issues:** 0
+- **Closed issues:** 3 (all related to converting skills into subagents, completed 2026-03-02)

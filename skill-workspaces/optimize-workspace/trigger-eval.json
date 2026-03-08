@@ -1,0 +1,20 @@
+[
+  {"query": "my plugin's knowledge directory is 45kb and its getting close to the limit -- can you help me slim it down?", "should_trigger": true},
+  {"query": "optimize plugin-ops -- I want to reduce the total footprint and remove any dead references", "should_trigger": true},
+  {"query": "the marketplace.md file in my plugin is over 10kb, can you condense it without losing important info?", "should_trigger": true},
+  {"query": "clean up my beads plugin -- theres probably duplicate content across knowledge files and some stale references", "should_trigger": true},
+  {"query": "trim my plugin -- its gotten bloated with verbose knowledge files and I want to make it leaner", "should_trigger": true},
+  {"query": "make my plugin smaller -- check all knowledge and skill files for things that can be removed or condensed", "should_trigger": true},
+  {"query": "reduce the size of my plugin, some of the knowledge files have a lot of redundant content", "should_trigger": true},
+  {"query": "improve the quality of my plugin -- sharpen the skill descriptions, clean up broken refs, condense knowledge", "should_trigger": true},
+  {"query": "analyze my plugin health and write a full report to REFLECTIONS.md", "should_trigger": false},
+  {"query": "why isnt my skill triggering? it should fire when I say 'deploy to staging'", "should_trigger": false},
+  {"query": "release my plugin version 2.0.0 with a git tag", "should_trigger": false},
+  {"query": "create a new skill called 'lint' that runs eslint on the project", "should_trigger": false},
+  {"query": "add my plugin to the ivintik marketplace so I can install it on other machines", "should_trigger": false},
+  {"query": "refactor this typescript module to use dependency injection instead of singletons", "should_trigger": false},
+  {"query": "review the architecture of my microservices project and suggest improvements", "should_trigger": false},
+  {"query": "optimize my postgresql queries -- they're running slow on the dashboard page", "should_trigger": false},
+  {"query": "clean up my git history -- squash the last 5 commits into one", "should_trigger": false},
+  {"query": "can you iterate on my skill description with test prompts to improve triggering accuracy?", "should_trigger": false}
+]

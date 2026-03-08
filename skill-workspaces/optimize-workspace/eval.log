@@ -1,0 +1,156 @@
+=== optimize ===
+{
+  "skill_name": "optimize",
+  "description": "Optimize a Claude Code plugin \u2014 reduce knowledge size, improve skill descriptions, remove dead references, condense verbose content. Use when the user asks to \\\"slim down\\\", \\\"clean up\\\", \\\"optimize\\\", \\\"reduce size\\\", \\\"make plugin smaller\\\", \\\"trim plugin\\\", \\\"reduce footprint\\\", \\\"condense\\\", \\\"shrink\\\", or \\\"improve plugin quality\\\". Also triggers when a user mentions a plugin file being too large (in KB), a knowledge directory approaching size limits, wanting to remove or condense things from plugin files, or wanting to sharpen skill descriptions as part of a cleanup pass. Covers any request to make a plugin leaner, smaller, or higher-quality by trimming, condensing, or removing content. Does NOT cover: health audits/reports (use reflect), skill description testing with eval loops (use skill-creator), or plugin debugging (use diagnose).",
+  "results": [
+    {
+      "query": "my plugin's knowledge directory is 45kb and its getting close to the limit -- can you help me slim it down?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "optimize plugin-ops -- I want to reduce the total footprint and remove any dead references",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "the marketplace.md file in my plugin is over 10kb, can you condense it without losing important info?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "clean up my beads plugin -- theres probably duplicate content across knowledge files and some stale references",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "trim my plugin -- its gotten bloated with verbose knowledge files and I want to make it leaner",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "make my plugin smaller -- check all knowledge and skill files for things that can be removed or condensed",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "reduce the size of my plugin, some of the knowledge files have a lot of redundant content",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "improve the quality of my plugin -- sharpen the skill descriptions, clean up broken refs, condense knowledge",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "analyze my plugin health and write a full report to REFLECTIONS.md",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "why isnt my skill triggering? it should fire when I say 'deploy to staging'",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "release my plugin version 2.0.0 with a git tag",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "create a new skill called 'lint' that runs eslint on the project",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "add my plugin to the ivintik marketplace so I can install it on other machines",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "refactor this typescript module to use dependency injection instead of singletons",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "review the architecture of my microservices project and suggest improvements",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "optimize my postgresql queries -- they're running slow on the dashboard page",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "clean up my git history -- squash the last 5 commits into one",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "can you iterate on my skill description with test prompts to improve triggering accuracy?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 18,
+    "passed": 10,
+    "failed": 8
+  }
+}

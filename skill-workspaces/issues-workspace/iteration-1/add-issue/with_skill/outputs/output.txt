@@ -1,0 +1,14 @@
+Action: --add (auto-created ISSUES.md, no prior file existed)
+Plugin: plugin-ops (/Users/ivintik/dev/personal/tools/claude-plugin-ops)
+Operated on temp copy: /tmp/plugin-ops-test-add-with/
+
+Issue logged:
+
+ISSUE-001: optimize skill crashes with KeyError when plugin has no skills directory
+- Status: open
+- Severity: major
+- Found: 2026-03-08
+- Context: Found during audit of plugin-ops plugin
+- Description: The optimize skill does not handle the case where a plugin has no `skills/` directory. When run against such a plugin, it crashes with a `KeyError` instead of gracefully handling the missing directory and proceeding with the rest of the audit.
+
+ISSUES.md was auto-created (did not exist previously) and ISSUE-001 was appended.

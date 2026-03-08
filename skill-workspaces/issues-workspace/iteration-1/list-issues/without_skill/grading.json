@@ -1,0 +1,26 @@
+{
+  "eval_id": 1,
+  "eval_name": "list-issues",
+  "configuration": "without_skill",
+  "expectations": [
+    {
+      "text": "reads-or-locates-ISSUES.md",
+      "passed": false,
+      "evidence": "Never looked for ISSUES.md — checked GitHub Issues (gh CLI) and Beads (bd CLI) instead. 24 tool calls to find no open issues in the wrong trackers."
+    },
+    {
+      "text": "uses-correct-plugin-path",
+      "passed": true,
+      "evidence": "Used /Users/ivintik/dev/personal/tools/claude-plugin-ops correctly"
+    },
+    {
+      "text": "no-cache-path-access",
+      "passed": true,
+      "evidence": "No cache path referenced"
+    }
+  ],
+  "pass_rate": 0.67,
+  "passed": 2,
+  "failed": 1,
+  "total": 3
+}

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Plugin lifecycle management for Claude Code plugins. Provides issue tracking, health audits, optimization with non-regression guarantees, fixing, releasing, and marketplace operations.
+Plugin lifecycle management for Claude Code plugins. Provides health audits, optimization, releasing, and marketplace operations.
 
 Complements Anthropic's `plugin-dev` plugin (which handles plugin creation, structure, skills, hooks, and MCP development) by adding operational lifecycle tooling on top.
 
@@ -14,14 +14,13 @@ plugin-ops/
 ├── scripts/
 │   └── release.py             # Deterministic release workflow
 ├── skills/
-│   ├── issues/SKILL.md        # Manage ISSUES.md
+│   ├── diagnose/SKILL.md      # Diagnose plugin defects
 │   ├── reflect/SKILL.md       # Self-reflection analysis
-│   ├── optimize/SKILL.md      # Optimize with non-regression
-│   ├── fix/SKILL.md           # Fix issues with non-regression
+│   ├── optimize/SKILL.md      # Optimize plugin size and quality
 │   ├── marketplace/SKILL.md   # Manage plugin marketplaces
 │   └── release/SKILL.md       # Version bump + publish (thin wrapper for release.py)
 ├── knowledge/
-│   ├── lifecycle-formats.md   # ISSUES.md + REFLECTIONS.md formats
+│   ├── lifecycle-formats.md   # REFLECTIONS.md format
 │   ├── marketplace.md         # marketplace.json schema, multi-provider
 │   └── configuration.md       # .local.md config pattern
 ├── CLAUDE.md
@@ -40,8 +39,6 @@ All plugin-ops skills operate on plugin source repos, NEVER on installed cache c
 
 - **Cache guard hook** — PreToolUse hook blocks Edit/Write on `~/.claude/plugins/cache/` with guidance to find the source repo via atlas.
 - **No MCP server** — All functionality through skills (markdown workflows).
-- **Non-regression** — optimize and fix skills read ISSUES.md to protect resolved fixes.
-- **ISSUES.md over database** — Lightweight, version-controlled, readable without tools.
 - **Provider-agnostic** — Works with GitHub, GitLab (including on-prem), and any git remote.
 - **Generic** — No hardcoded paths, repos, or organization-specific references.
 
@@ -54,12 +51,19 @@ This plugin does NOT duplicate Anthropic's `plugin-dev`. Use each for its streng
 | Create a new plugin | `/plugin-dev:create-plugin` |
 | Learn skill/hook/MCP development | `/plugin-dev:*` skills |
 | Validate plugin structure | `plugin-dev:plugin-validator` agent |
-| Track issues across plugin lifetime | `/plugin-ops:issues` |
+| Diagnose plugin defects | `/plugin-ops:diagnose` |
 | Audit plugin health over time | `/plugin-ops:reflect` |
-| Optimize with regression safety | `/plugin-ops:optimize` |
-| Fix tracked issues safely | `/plugin-ops:fix` |
+| Optimize plugin size/quality | `/plugin-ops:optimize` |
 | Manage plugin marketplaces | `/plugin-ops:marketplace` |
 | Release and publish versions | `/plugin-ops:release` |
+
+## Known Limitation: skill-creator Description Optimization
+
+The `/skill-creator` description optimization loop (`run_loop.py`) has a 120-second timeout for `claude -p` calls in its `improve_description.py`. This is too short for Opus — the loop crashes during the "Improving description..." step.
+
+**Workaround:** Use `--model claude-sonnet-4-6` when running `run_loop.py`, or write descriptions manually using the baseline failure data the loop produces before crashing.
+
+**Cleanup:** After any `run_loop.py` run, remove leaked temp directories: `rm -r ~/.claude/plugins/cache/temp_git_*` (can be 100MB+ each, hundreds accumulate).
 
 ## Adding Knowledge
 

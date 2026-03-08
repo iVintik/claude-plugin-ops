@@ -1,0 +1,22 @@
+[
+  {"query": "theres a problem with the collector module — it drops events when kafka lag exceeds threshold, note it somewhere", "should_trigger": true},
+  {"query": "i have a problem with the auth service, tokens expire too early — log it", "should_trigger": true},
+  {"query": "it is a problem in the enrichment pipeline — records with null userId get silently skipped", "should_trigger": true},
+  {"query": "there is a problem in the router module, it crashes on empty routing rules", "should_trigger": true},
+  {"query": "i noticed a problem in the mobile sdk — the bridge webview doesnt fire onReady when sdk is in test mode", "should_trigger": true},
+  {"query": "what issues are we tracking for this project right now?", "should_trigger": true},
+  {"query": "mark ISSUE-004 as resolved, i pushed the fix for the null pointer crash", "should_trigger": true},
+  {"query": "there seems to be a bug in the postgres loader — it retries indefinitely on constraint violations instead of dead-lettering", "should_trigger": true},
+  {"query": "log that the s3 loader fails silently when bucket doesnt exist — no error in logs, events just disappear", "should_trigger": true},
+  {"query": "I have a problem with the iglu schema registry — it returns 500 on schema validation but the schema is valid", "should_trigger": true},
+  {"query": "there is a problem in the collector module — fix it", "should_trigger": false},
+  {"query": "i have a problem with my code, the fetchUser function isnt returning the right type — help me debug", "should_trigger": false},
+  {"query": "theres a problem with my deploy, the helm chart fails on the qa cluster — whats wrong?", "should_trigger": false},
+  {"query": "it is a problem in the auth module — can you explain why jwt tokens expire before their stated ttl?", "should_trigger": false},
+  {"query": "open a github issue on the beads repo — bd list panics on empty .beads dir", "should_trigger": false},
+  {"query": "what open jira tickets do we have in the DS-collector project?", "should_trigger": false},
+  {"query": "there is a problem in the router — create a relay handoff so the other dev can pick it up", "should_trigger": false},
+  {"query": "i have a problem with the enrichment pipeline config — can you help me write the hocon correctly?", "should_trigger": false},
+  {"query": "there is a problem in module x — run a full audit and tell me whats broken", "should_trigger": false},
+  {"query": "i have a problem with the build — the docker image is too large, lets optimize it", "should_trigger": false}
+]

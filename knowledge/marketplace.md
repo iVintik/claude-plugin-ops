@@ -1,6 +1,6 @@
 # Marketplace
 
-A marketplace is a git repository containing a `marketplace.json` file that catalogs available Claude Code plugins. Users point Claude Code at a marketplace repo to discover and install plugins.
+A marketplace is a git repository containing `.claude-plugin/marketplace.json` that catalogs available Claude Code plugins.
 
 ## marketplace.json Schema
 
@@ -25,272 +25,73 @@ A marketplace is a git repository containing a `marketplace.json` file that cata
 }
 ```
 
-The `marketplace.json` lives at `.claude-plugin/marketplace.json` inside the marketplace repo.
+The file lives at `.claude-plugin/marketplace.json` inside the marketplace repo.
 
 ## Multi-Marketplace Support
 
-A plugin can be published to multiple marketplaces. The user configures their marketplaces in `.claude/plugin-ops.local.md` (see `knowledge/configuration.md`).
+A plugin can be published to multiple marketplaces. Configure in `.claude/plugin-ops.local.md` (see `knowledge/configuration.md`).
 
 ## Provider Support
 
 ### GitHub
 - Create repos: `gh repo create <name> --public`
-- Clone: `git clone https://github.com/<owner>/<repo>.git`
-- Push: standard git push
 - Requires: `gh` CLI authenticated
 
 ### GitLab (including on-prem)
 - Create repos: `glab project create <name>` or GitLab API
-- Clone: `git clone https://gitlab.example.com/<group>/<repo>.git`
-- Push: standard git push
 - Requires: `glab` CLI authenticated, or `GITLAB_TOKEN` + API URL
-- On-prem: use `--hostname` with glab, or configure via `GITLAB_HOST`
+- On-prem: use `--hostname` with glab, or `GITLAB_HOST`
 
 ### Generic Git
-- Any git remote that supports push (Gitea, Bitbucket, self-hosted)
+- Any git remote (Gitea, Bitbucket, self-hosted)
 - No marketplace management CLI — manual or API-based
 
 ## Automated Releases via CI
 
-Plugins can automate releases using GitHub Actions with a **repository dispatch** pattern. Instead of duplicating marketplace update logic in every plugin repo, the marketplace repo owns a single workflow that receives dispatch events.
-
-### Architecture
+### GitHub Actions — Repository Dispatch Pattern
 
 ```
 Plugin repo (on GitHub release)
-  ├── npm job: publishes to public npm registry (for OpenClaw)
   └── marketplace job: fires repository_dispatch with {plugin, version}
-                            │
-                            ▼
-Marketplace repo (update-plugin.yml workflow)
-  └── Receives dispatch → updates marketplace.json → commits → pushes
+        → Marketplace repo (update-plugin.yml) updates marketplace.json
 ```
 
-### Plugin Repo Workflow (`.github/workflows/publish.yml`)
+**Plugin repo** (`.github/workflows/publish.yml`): On release, read plugin name/version from `plugin.json`, then `gh api repos/<owner>/<marketplace-repo>/dispatches` with `event_type=plugin-release` and `client_payload` containing plugin + version. Requires `MARKETPLACE_TOKEN` secret (fine-grained PAT with Contents: Read+Write on marketplace repo).
 
-```yaml
-name: Publish
-on:
-  release:
-    types: [published]
+**Marketplace repo** (`.github/workflows/update-plugin.yml`): On `repository_dispatch`, use `jq` to update version in `.claude-plugin/marketplace.json`, commit, push.
 
-jobs:
-  npm:
-    name: Publish to npm
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          registry-url: https://registry.npmjs.org
-      - run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-  marketplace:
-    name: Update Claude marketplace
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Read plugin metadata
-        id: meta
-        run: |
-          echo "name=$(jq -r .name .claude-plugin/plugin.json)" >> "$GITHUB_OUTPUT"
-          echo "version=$(jq -r .version .claude-plugin/plugin.json)" >> "$GITHUB_OUTPUT"
-      - name: Dispatch marketplace update
-        run: |
-          gh api repos/<owner>/<marketplace-repo>/dispatches \
-            -f event_type=plugin-release \
-            -f 'client_payload[plugin]=${{ steps.meta.outputs.name }}' \
-            -f 'client_payload[version]=${{ steps.meta.outputs.version }}'
-        env:
-          GH_TOKEN: ${{ secrets.MARKETPLACE_TOKEN }}
-```
-
-### Marketplace Repo Workflow (`.github/workflows/update-plugin.yml`)
-
-```yaml
-name: Update plugin version
-on:
-  repository_dispatch:
-    types: [plugin-release]
-
-jobs:
-  update:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Update marketplace.json
-        run: |
-          jq --arg name "${{ github.event.client_payload.plugin }}" \
-             --arg ver "${{ github.event.client_payload.version }}" \
-             '(.plugins[] | select(.name == $name)).version = $ver' \
-             .claude-plugin/marketplace.json > tmp.json
-          mv tmp.json .claude-plugin/marketplace.json
-      - name: Commit and push
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .claude-plugin/marketplace.json
-          if git diff --cached --quiet; then
-            echo "No changes"
-          else
-            git commit -m "release: ${{ github.event.client_payload.plugin }} v${{ github.event.client_payload.version }}"
-            git push
-          fi
-```
-
-### Setting Up a New Plugin for CI Release
-
-1. **Ensure plugin is listed in marketplace** — use `/plugin-ops:marketplace add` first
-2. **Add `package.json`** for npm publishing (with `license`, `repository`, `files` fields)
-3. **Add `openclaw.plugin.json`** if the plugin also targets OpenClaw
-4. **Copy the publish workflow** above to `.github/workflows/publish.yml`
-5. **Set secrets** on the plugin repo:
-   ```bash
-   gh secret set NPM_TOKEN --repo <org>/<repo>
-   gh secret set MARKETPLACE_TOKEN --repo <org>/<repo>
-   ```
-6. **Ensure marketplace has the dispatch workflow** — copy `update-plugin.yml` above
-7. **Test**: create a GitHub release → both npm and marketplace should update
-
-### Required Secrets
-
-| Secret | Purpose | How to create |
-|--------|---------|---------------|
-| `NPM_TOKEN` | Publish to npm | https://www.npmjs.com/settings/tokens → **Automation** type |
-| `MARKETPLACE_TOKEN` | Dispatch to marketplace repo | GitHub fine-grained PAT with **Contents: Read and write** on the marketplace repo |
-
-### Token Renewal
-
-**NPM_TOKEN** (npm Automation token):
-- No expiration by default — regenerate only if compromised
-- Create at https://www.npmjs.com/settings/tokens/create, type **Automation**
-- Update secret: `gh secret set NPM_TOKEN --repo <org>/<repo>`
-
-**MARKETPLACE_TOKEN** (GitHub fine-grained PAT):
-- Expires after the duration you set (max 1 year) — **set a calendar reminder**
-- Create at https://github.com/settings/tokens?type=beta
-- Scope: **Only select repositories** → marketplace repo, **Contents: Read and write**
-- The same PAT works across all plugin repos
-- When expired, regenerate and update on all repos:
-  ```bash
-  gh secret set MARKETPLACE_TOKEN --repo <org>/<plugin-1>
-  gh secret set MARKETPLACE_TOKEN --repo <org>/<plugin-2>
-  ```
-
-### GitLab CI
-
-For GitLab-hosted plugins (including on-prem GitLab), use **multi-project pipelines** with the `trigger` keyword. The plugin repo triggers a downstream pipeline on the marketplace repo using GitLab's built-in `CI_JOB_TOKEN` — no tokens or CI/CD variables to configure.
-
-#### Architecture
+### GitLab CI — Multi-Project Pipelines
 
 ```
 Plugin repo (on tag push v*)
-  └── read-metadata job: extracts plugin name + version from tag
-  └── update-marketplace job: triggers downstream pipeline via `trigger` keyword
-                            │  (passes PLUGIN_NAME + PLUGIN_VERSION via dotenv)
-                            ▼
-Marketplace repo (triggered pipeline)
-  └── Receives variables → updates marketplace.json → commits → pushes (CI_JOB_TOKEN)
+  └── trigger keyword fires downstream pipeline on marketplace repo
+        → passes PLUGIN_NAME + PLUGIN_VERSION via dotenv
 ```
 
-#### Prerequisites
+Uses `CI_JOB_TOKEN` — no tokens to configure. Marketplace project must grant job token access to plugin repos (Settings → CI/CD → Job token permissions).
 
-The marketplace project must allow job tokens from plugin repos:
-- Marketplace project → Settings → CI/CD → **Job token permissions** → add plugin repos (or their parent group)
+**Plugin repo**: `read-metadata` stage extracts name/version to `build.env`, `update-marketplace` stage uses `trigger: project: <group>/<marketplace-repo>`.
 
-#### Plugin Repo Pipeline (`.gitlab-ci.yml`)
+**Marketplace repo**: Receives `PLUGIN_NAME`/`PLUGIN_VERSION` variables, updates `.claude-plugin/marketplace.json` with `jq`, commits, pushes.
 
-```yaml
-stages:
-  - prepare
-  - release
+### Setup Checklist (both providers)
 
-read-metadata:
-  stage: prepare
-  image: alpine:latest
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
-  before_script:
-    - apk add --no-cache jq
-  script:
-    - echo "PLUGIN_NAME=$(jq -r .name .claude-plugin/plugin.json)" >> build.env
-    - echo "PLUGIN_VERSION=${CI_COMMIT_TAG#v}" >> build.env
-  artifacts:
-    reports:
-      dotenv: build.env
-
-update-marketplace:
-  stage: release
-  needs: [read-metadata]
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
-  trigger:
-    project: <group>/<marketplace-repo>
-    branch: <default-branch>
-    forward:
-      pipeline_variables: true
-```
-
-#### Marketplace Repo Pipeline (`.gitlab-ci.yml`)
-
-```yaml
-stages:
-  - update
-
-update-plugin-version:
-  stage: update
-  image: alpine:latest
-  rules:
-    - if: '$PLUGIN_NAME && $PLUGIN_VERSION'
-  before_script:
-    - apk add --no-cache git jq
-  script:
-    - |
-      jq --arg name "$PLUGIN_NAME" \
-         --arg ver "$PLUGIN_VERSION" \
-         '(.plugins[] | select(.name == $name)).version = $ver' \
-         .claude-plugin/marketplace.json > tmp.json
-      mv tmp.json .claude-plugin/marketplace.json
-      git config user.name "gitlab-ci[bot]"
-      git config user.email "ci@your-gitlab-host.com"
-      git add .claude-plugin/marketplace.json
-      if git diff --cached --quiet; then
-        echo "No changes needed"
-      else
-        git commit -m "release: ${PLUGIN_NAME} v${PLUGIN_VERSION}"
-        git push "https://gitlab-ci-token:${CI_JOB_TOKEN}@your-gitlab-host.com/${CI_PROJECT_PATH}.git" HEAD:develop
-      fi
-```
-
-#### Setting Up a New Plugin for GitLab CI Release
-
-1. **Ensure plugin is listed in marketplace** — use `/plugin-ops:marketplace add` first
-2. **Grant job token access** — marketplace project → Settings → CI/CD → Job token permissions → add the plugin repo (or its parent group for all repos at once)
-3. **Copy `.gitlab-ci.yml`** template above to the plugin repo (update `project` and `branch` in the `trigger` block)
-4. **Ensure marketplace repo has its `.gitlab-ci.yml`** with the `update-plugin-version` job
-5. **Test**: push a semver tag (`git tag -a v1.0.0 -m "release: v1.0.0" && git push origin v1.0.0`) → marketplace should update
-
-No CI/CD variables or tokens needed on any repo.
+1. Ensure plugin is listed in marketplace (`/plugin-ops:marketplace add`)
+2. Copy the appropriate CI workflow template to your plugin repo
+3. Set required secrets/permissions (GitHub: `MARKETPLACE_TOKEN`; GitLab: job token access)
+4. Ensure marketplace repo has the receiver workflow
+5. Test by creating a release/tag
 
 ### CI vs Local Release
 
 | Method | When to use |
 |--------|------------|
-| CI (GitHub Actions) | Standard releases for GitHub-hosted plugins — create a GitHub release, auto-publishes to npm + marketplace |
-| CI (GitLab) | Standard releases for GitLab-hosted plugins — push a tag, auto-updates marketplace |
-| Local (`/plugin-ops:release`) | Quick iteration, or when CI isn't set up yet. If CI is configured, the tag push triggers CI automatically — marketplace update is then redundant (but harmless) |
-
-Both methods keep `plugin.json` version and `marketplace.json` version in sync.
+| CI (GitHub/GitLab) | Standard releases — tag triggers auto-update |
+| Local (`/plugin-ops:release`) | Quick iteration, or no CI yet. If CI exists, the tag push triggers it automatically |
 
 ## Version Sync Rule
 
-The `version` in `marketplace.json` MUST match the `version` in the plugin's `plugin.json`. The `release` skill enforces this.
+The `version` in `marketplace.json` MUST match the plugin's `plugin.json` version. The `release` skill enforces this.
 
 ## Versioning Guidelines
 
@@ -298,6 +99,4 @@ The `version` in `marketplace.json` MUST match the `version` in the plugin's `pl
 |-------------|-------------|---------|
 | New skill or major feature | Minor | 0.1.0 → 0.2.0 |
 | Bug fix, knowledge update | Patch | 0.1.0 → 0.1.1 |
-| Breaking changes (rename, remove skill) | Major | 0.x.y → 1.0.0 |
-
-For pre-1.0 plugins, minor bumps can include breaking changes.
+| Breaking changes (rename, remove) | Major | 0.x.y → 1.0.0 |

@@ -1,0 +1,31 @@
+{
+  "eval_id": 3,
+  "eval_name": "resolve-issue",
+  "configuration": "without_skill",
+  "expectations": [
+    {
+      "text": "finds-ISSUE-001",
+      "passed": true,
+      "evidence": "Located ISSUE-001 and updated it correctly"
+    },
+    {
+      "text": "updates-status-to-resolved",
+      "passed": true,
+      "evidence": "Status changed from 'open' to 'resolved', Resolved date set to 2026-03-08"
+    },
+    {
+      "text": "records-resolution-description",
+      "passed": true,
+      "evidence": "Resolution field set to: 'Added a guard to check if hooks/ dir exists before scanning it.'"
+    },
+    {
+      "text": "no-cache-path-access",
+      "passed": true,
+      "evidence": "Operated on /tmp/plugin-ops-test-resolve-without/ temp copy"
+    }
+  ],
+  "pass_rate": 1.0,
+  "passed": 4,
+  "failed": 0,
+  "total": 4
+}

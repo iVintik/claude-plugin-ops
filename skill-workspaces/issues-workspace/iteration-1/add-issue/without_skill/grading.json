@@ -1,0 +1,31 @@
+{
+  "eval_id": 2,
+  "eval_name": "add-issue",
+  "configuration": "without_skill",
+  "expectations": [
+    {
+      "text": "creates-or-updates-ISSUES.md",
+      "passed": true,
+      "evidence": "Added ISSUE-002 to a temp ISSUES.md (copied from resolve-issue workspace output)"
+    },
+    {
+      "text": "correct-issue-format",
+      "passed": false,
+      "evidence": "Missing '—' placeholder for empty Resolved/Resolution fields (left blank). Missing header comment. Format partially matches but deviates from the ISSUE-NNN template."
+    },
+    {
+      "text": "no-unnecessary-prompting",
+      "passed": true,
+      "evidence": "Wrote the issue directly without asking user for any fields"
+    },
+    {
+      "text": "no-cache-path-access",
+      "passed": true,
+      "evidence": "Used /tmp/plugin-ops-test-add-without/ temp copy"
+    }
+  ],
+  "pass_rate": 0.75,
+  "passed": 3,
+  "failed": 1,
+  "total": 4
+}

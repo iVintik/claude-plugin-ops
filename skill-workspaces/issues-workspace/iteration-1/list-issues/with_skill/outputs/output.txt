@@ -1,0 +1,9 @@
+No ISSUES.md found for plugin at /Users/ivintik/dev/personal/tools/claude-plugin-ops.
+
+To start tracking issues, run the issues skill with --init to create an ISSUES.md file:
+
+  /plugin-ops:issues /Users/ivintik/dev/personal/tools/claude-plugin-ops --init
+
+Then use --add to log your first issue:
+
+  /plugin-ops:issues /Users/ivintik/dev/personal/tools/claude-plugin-ops --add

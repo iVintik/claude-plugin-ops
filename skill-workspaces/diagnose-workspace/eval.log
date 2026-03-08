@@ -1,0 +1,156 @@
+=== diagnose ===
+{
+  "skill_name": "diagnose",
+  "description": "Diagnose why a Claude Code plugin skill fails to load, doesn't trigger when expected, errors out, or behaves unexpectedly. Use proactively whenever you notice a plugin or skill misbehaving, or when the user reports something like: \\\"why isn't this working\\\", \\\"plugin not triggering\\\", \\\"skill broken\\\", \\\"debug plugin\\\", \\\"diagnose plugin\\\", \\\"this skill should have fired\\\", \\\"fix plugin\\\", \\\"skill overlap\\\", \\\"wrong skill triggered\\\". Also trigger when a hook fails silently, a plugin won't load, or tools from an MCP server aren't available. Does NOT cover: overall plugin health audits (use reflect), size optimization (use optimize), or version releases (use release).",
+  "results": [
+    {
+      "query": "my relay:issue skill isn't triggering when I type 'file a bug' -- it used to work but now nothing happens",
+      "should_trigger": true,
+      "trigger_rate": 0.3333333333333333,
+      "triggers": 1,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "the plugin-ops marketplace command keeps erroring out with some json parse error, can you figure out whats wrong?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "why isnt my beads skill firing? I say 'list issues' and claude just ignores it",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "I installed a new plugin but none of its skills show up -- debug this for me",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "my SessionStart hook used to work but after updating the plugin it stopped running silently",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "something is wrong with my atlas plugin -- the agent spawns but then immediately fails with a tool error",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "this skill should have fired when I asked about kubernetes deploys but it didnt trigger at all",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "I have two plugins with similar skills and the wrong one keeps getting triggered -- help me fix the overlap",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "can you do a comprehensive health audit of my plugin and write the results to REFLECTIONS.md?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "optimize my plugin -- the knowledge files are too big and I want to reduce the total size under 50kb",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "create a new skill for my plugin that handles database migrations",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "release version 1.5.0 of my plugin -- bump, commit, tag, and push",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "my python tests are failing with an import error in the conftest.py -- can you debug this?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "I want to improve the quality of my skill descriptions to get better triggering -- can you help me iterate on them?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "set up a new github marketplace repo for our team's plugins",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "the CI pipeline failed on the linting step -- check the gitlab job output and tell me what went wrong",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "why is my react component not rendering? the useEffect hook seems to be running twice",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "review the code in my latest commit and check for security issues",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 18,
+    "passed": 10,
+    "failed": 8
+  }
+}

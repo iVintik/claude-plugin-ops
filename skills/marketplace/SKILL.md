@@ -1,12 +1,12 @@
 ---
 name: marketplace
-description: "Manage Claude Code plugin marketplaces — create, list, add, or remove plugins from marketplace repositories. Use when the user asks to \"create a marketplace\", \"publish a plugin\", \"list marketplace plugins\", \"add plugin to store\", \"manage plugin catalog\", \"set up a plugin registry\", \"remove from marketplace\", or anything about plugin distribution and discovery."
+description: "ALWAYS invoke this skill when the user mentions \"marketplace\" in connection with creating, managing, populating, or querying a plugin marketplace they own. Trigger phrases include: \"init marketplace\", \"create marketplace\", \"add to marketplace\", \"publish to marketplace\", \"list marketplace\", \"remove from marketplace\", \"marketplace repo\", \"plugin store\", \"plugin catalog\", \"plugin registry\". Also trigger when the user wants to set up a git repository for distributing or cataloging Claude Code plugins. Do NOT trigger for: installing/browsing plugins as a consumer, releasing plugin versions, plugin development, code pushes, or plugin audits."
 argument-hint: "<subcommand> [options]"
 ---
 
 # Marketplace Management
 
-Manage Claude Code plugin marketplaces. A marketplace is a git repository with a `marketplace.json` that catalogs available plugins.
+Manage Claude Code plugin marketplaces. A marketplace is a git repository with a `.claude-plugin/marketplace.json` that catalogs available plugins.
 
 ## Parse Arguments
 
@@ -41,7 +41,7 @@ Commit, push, update config.
 
 ## list — List Marketplace Plugins
 
-Read `marketplace.json` from local clone, display:
+Read `.claude-plugin/marketplace.json` from local clone, display:
 ```
 Marketplace: {name} ({path})
 | Plugin | Version | Description |
@@ -54,7 +54,7 @@ If no `--store` and multiple configured, list all.
 1. Read plugin's `plugin.json` for name, description, version
 2. Get plugin's git remote URL
 3. Check for existing entry (offer update if exists)
-4. Append to `marketplace.json`, commit, push
+4. Append to `.claude-plugin/marketplace.json`, commit, push
 
 ## remove — Remove Plugin from Marketplace
 
@@ -63,6 +63,6 @@ If no `--store` and multiple configured, list all.
 3. Remove entry, commit, push
 
 ## Error Handling
-- Missing `local_path` or `marketplace.json`: report clearly
+- Missing `local_path` or `.claude-plugin/marketplace.json`: report clearly
 - Git push fails: suggest `git pull` first
 - Never expose tokens in output

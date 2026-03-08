@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>optimize — Skill Description Optimization</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lora', Georgia, serif;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            background: #faf9f5;
+            color: #141413;
+        }
+        h1 { font-family: 'Poppins', sans-serif; color: #141413; }
+        .explainer {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #e8e6dc;
+            color: #b0aea5;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+        .summary {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #e8e6dc;
+        }
+        .summary p { margin: 5px 0; }
+        .best { color: #788c5d; font-weight: bold; }
+        .table-container {
+            overflow-x: auto;
+            width: 100%;
+        }
+        table {
+            border-collapse: collapse;
+            background: white;
+            border: 1px solid #e8e6dc;
+            border-radius: 6px;
+            font-size: 12px;
+            min-width: 100%;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #e8e6dc;
+            white-space: normal;
+            word-wrap: break-word;
+        }
+        th {
+            font-family: 'Poppins', sans-serif;
+            background: #141413;
+            color: #faf9f5;
+            font-weight: 500;
+        }
+        th.test-col {
+            background: #6a9bcc;
+        }
+        th.query-col { min-width: 200px; }
+        td.description {
+            font-family: monospace;
+            font-size: 11px;
+            word-wrap: break-word;
+            max-width: 400px;
+        }
+        td.result {
+            text-align: center;
+            font-size: 16px;
+            min-width: 40px;
+        }
+        td.test-result {
+            background: #f0f6fc;
+        }
+        .pass { color: #788c5d; }
+        .fail { color: #c44; }
+        .rate {
+            font-size: 9px;
+            color: #b0aea5;
+            display: block;
+        }
+        tr:hover { background: #faf9f5; }
+        .score {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 11px;
+        }
+        .score-good { background: #eef2e8; color: #788c5d; }
+        .score-ok { background: #fef3c7; color: #d97706; }
+        .score-bad { background: #fceaea; color: #c44; }
+        .train-label { color: #b0aea5; font-size: 10px; }
+        .test-label { color: #6a9bcc; font-size: 10px; font-weight: bold; }
+        .best-row { background: #f5f8f2; }
+        th.positive-col { border-bottom: 3px solid #788c5d; }
+        th.negative-col { border-bottom: 3px solid #c44; }
+        th.test-col.positive-col { border-bottom: 3px solid #788c5d; }
+        th.test-col.negative-col { border-bottom: 3px solid #c44; }
+        .legend { font-family: 'Poppins', sans-serif; display: flex; gap: 20px; margin-bottom: 10px; font-size: 13px; align-items: center; }
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .legend-swatch { width: 16px; height: 16px; border-radius: 3px; display: inline-block; }
+        .swatch-positive { background: #141413; border-bottom: 3px solid #788c5d; }
+        .swatch-negative { background: #141413; border-bottom: 3px solid #c44; }
+        .swatch-test { background: #6a9bcc; }
+        .swatch-train { background: #141413; }
+    </style>
+</head>
+<body>
+    <h1>optimize — Skill Description Optimization</h1>
+    <div class="explainer">
+        <strong>Optimizing your skill's description.</strong> This page updates automatically as Claude tests different versions of your skill's description. Each row is an iteration — a new description attempt. The columns show test queries: green checkmarks mean the skill triggered correctly (or correctly didn't trigger), red crosses mean it got it wrong. The "Train" score shows performance on queries used to improve the description; the "Test" score shows performance on held-out queries the optimizer hasn't seen. When it's done, Claude will apply the best-performing description to your skill.
+    </div>
+
+    <div class="summary">
+        <p><strong>Original:</strong> Optimize a Claude Code plugin — reduce knowledge size, improve skill descriptions, remove dead references, condense verbose content. Use when the user asks to \&quot;slim down\&quot;, \&quot;clean up\&quot;, \&quot;optimize\&quot;, \&quot;reduce size\&quot;, \&quot;make plugin smaller\&quot;, \&quot;trim plugin\&quot;, \&quot;reduce footprint\&quot;, or \&quot;improve plugin quality\&quot;.</p>
+        <p class="best"><strong>Best:</strong> Optimize a Claude Code plugin — reduce knowledge size, improve skill descriptions, remove dead references, condense verbose content. Use when the user asks to \&quot;slim down\&quot;, \&quot;clean up\&quot;, \&quot;optimize\&quot;, \&quot;reduce size\&quot;, \&quot;make plugin smaller\&quot;, \&quot;trim plugin\&quot;, \&quot;reduce footprint\&quot;, or \&quot;improve plugin quality\&quot;.</p>
+        <p><strong>Best Score:</strong> 4/7 (test)</p>
+        <p><strong>Iterations:</strong> 5 | <strong>Train:</strong> 11 | <strong>Test:</strong> 7</p>
+    </div>
+
+    <div class="legend">
+        <span style="font-weight:600">Query columns:</span>
+        <span class="legend-item"><span class="legend-swatch swatch-positive"></span> Should trigger</span>
+        <span class="legend-item"><span class="legend-swatch swatch-negative"></span> Should NOT trigger</span>
+        <span class="legend-item"><span class="legend-swatch swatch-train"></span> Train</span>
+        <span class="legend-item"><span class="legend-swatch swatch-test"></span> Test</span>
+    </div>
+
+    <div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Iter</th>
+                <th>Train</th>
+                <th>Test</th>
+                <th class="query-col">Description</th>
+                <th class="positive-col">improve the quality of my plugin -- sharpen the skill descriptions, clean up broken refs, condense knowledge</th>
+                <th class="positive-col">the marketplace.md file in my plugin is over 10kb, can you condense it without losing important info?</th>
+                <th class="positive-col">make my plugin smaller -- check all knowledge and skill files for things that can be removed or condensed</th>
+                <th class="positive-col">my plugin&#x27;s knowledge directory is 45kb and its getting close to the limit -- can you help me slim it down?</th>
+                <th class="positive-col">optimize plugin-ops -- I want to reduce the total footprint and remove any dead references</th>
+                <th class="negative-col">analyze my plugin health and write a full report to REFLECTIONS.md</th>
+                <th class="negative-col">create a new skill called &#x27;lint&#x27; that runs eslint on the project</th>
+                <th class="negative-col">add my plugin to the ivintik marketplace so I can install it on other machines</th>
+                <th class="negative-col">can you iterate on my skill description with test prompts to improve triggering accuracy?</th>
+                <th class="negative-col">clean up my git history -- squash the last 5 commits into one</th>
+                <th class="negative-col">why isnt my skill triggering? it should fire when I say &#x27;deploy to staging&#x27;</th>
+                <th class="test-col positive-col">clean up my beads plugin -- theres probably duplicate content across knowledge files and some stale references</th>
+                <th class="test-col positive-col">trim my plugin -- its gotten bloated with verbose knowledge files and I want to make it leaner</th>
+                <th class="test-col positive-col">reduce the size of my plugin, some of the knowledge files have a lot of redundant content</th>
+                <th class="test-col negative-col">optimize my postgresql queries -- they&#x27;re running slow on the dashboard page</th>
+                <th class="test-col negative-col">release my plugin version 2.0.0 with a git tag</th>
+                <th class="test-col negative-col">refactor this typescript module to use dependency injection instead of singletons</th>
+                <th class="test-col negative-col">review the architecture of my microservices project and suggest improvements</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="best-row">
+                <td>1</td>
+                <td><span class="score score-ok">18/33</span></td>
+                <td><span class="score score-ok">12/21</span></td>
+                <td class="description">Optimize a Claude Code plugin — reduce knowledge size, improve skill descriptions, remove dead references, condense verbose content. Use when the user asks to \&quot;slim down\&quot;, \&quot;clean up\&quot;, \&quot;optimize\&quot;, \&quot;reduce size\&quot;, \&quot;make plugin smaller\&quot;, \&quot;trim plugin\&quot;, \&quot;reduce footprint\&quot;, or \&quot;improve plugin quality\&quot;.</td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+            </tr>
+            <tr class="">
+                <td>2</td>
+                <td><span class="score score-ok">18/33</span></td>
+                <td><span class="score score-ok">12/21</span></td>
+                <td class="description">Analyze and optimize a Claude Code plugin to reduce its size, improve quality, and clean up issues. Use when the user wants to make a plugin smaller or leaner, condense or shrink knowledge files that are too large or approaching size limits, sharpen or improve skill descriptions, remove dead or broken references, or generally improve plugin quality. Triggers for plugin-level optimization work — reducing file sizes (KB), trimming verbose content, condensing markdown files without losing information, checking knowledge directories for bloat, and removing unnecessary or duplicate content from plugin files. Does NOT handle: plugin health audits/reports (use reflect), skill description testing/iteration (use skill-creator), plugin debugging (use diagnose), or non-plugin code cleanup.</td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+            </tr>
+            <tr class="">
+                <td>3</td>
+                <td><span class="score score-ok">18/33</span></td>
+                <td><span class="score score-ok">12/21</span></td>
+                <td class="description">Optimize a Claude Code plugin — reduce knowledge size, improve skill descriptions, remove dead references, condense verbose content. Use when the user asks to &quot;slim down&quot;, &quot;clean up&quot;, &quot;optimize&quot;, &quot;reduce size&quot;, &quot;make plugin smaller&quot;, &quot;trim plugin&quot;, &quot;reduce footprint&quot;, &quot;condense&quot;, &quot;shrink&quot;, or &quot;improve plugin quality&quot;. Also triggers when a user mentions a plugin file being too large (in KB), a knowledge directory approaching size limits, wanting to remove or condense things from plugin files, or wanting to sharpen skill descriptions as part of a cleanup pass. Covers any request to make a plugin leaner, smaller, or higher-quality by trimming, condensing, or removing content. Does NOT cover: health audits/reports (use reflect), skill description testing with eval loops (use skill-creator), or plugin debugging (use diagnose).</td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+            </tr>
+            <tr class="">
+                <td>4</td>
+                <td><span class="score score-ok">18/33</span></td>
+                <td><span class="score score-ok">12/21</span></td>
+                <td class="description">Optimize a Claude Code plugin — reduce knowledge size, improve skill descriptions, remove dead references, condense verbose content. Use when the user asks to &quot;slim down&quot;, &quot;clean up&quot;, &quot;optimize&quot;, &quot;reduce size&quot;, &quot;make plugin smaller&quot;, &quot;trim plugin&quot;, &quot;reduce footprint&quot;, &quot;condense&quot;, &quot;shrink&quot;, or &quot;improve plugin quality&quot;. Also triggers when a user mentions a plugin file being too large (in KB), a knowledge directory approaching size limits, wanting to remove or condense things from plugin files, or wanting to sharpen skill descriptions as part of a cleanup pass. Covers any request to make a plugin leaner, smaller, or higher-quality by trimming, condensing, or removing content. Does NOT cover: health audits/reports (use reflect), skill description testing with eval loops (use skill-creator), or plugin debugging (use diagnose).</td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+            </tr>
+            <tr class="">
+                <td>5</td>
+                <td><span class="score score-ok">18/33</span></td>
+                <td><span class="score score-ok">12/21</span></td>
+                <td class="description">Optimize a Claude Code plugin for size, quality, and cleanliness. Invoke this skill FIRST — before doing any work yourself — whenever the user wants to: reduce plugin file sizes or total footprint, condense or shrink knowledge files (especially when approaching KB limits), make a plugin smaller or leaner, clean up or remove dead/broken references from plugin files, sharpen or improve skill descriptions as part of optimization, or trim/condense verbose plugin content without losing information. Examples: &quot;optimize my plugin&quot;, &quot;slim down plugin-ops&quot;, &quot;my knowledge dir is 45kb&quot;, &quot;condense this 10kb file&quot;, &quot;make my plugin smaller&quot;, &quot;clean up broken refs&quot;, &quot;reduce footprint&quot;, &quot;improve plugin quality&quot;. NOT for: health audits/reports (use reflect), creating/iterating skills (use skill-creator), debugging triggers (use diagnose), or non-plugin cleanup tasks like git history.</td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result fail">✗<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result fail">✗<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+                <td class="result test-result pass">✓<span class="rate">0/3</span></td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+</body>
+</html>

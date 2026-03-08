@@ -1,0 +1,11 @@
+{
+  "eval_id": 3,
+  "eval_name": "resolve-issue",
+  "prompt": "I just fixed ISSUE-001 in the plugin-ops plugin — the reflect skill was skipping hooks when the hooks dir didn't exist. I added a guard for that. Mark it resolved. Plugin is at /Users/ivintik/dev/personal/tools/claude-plugin-ops",
+  "assertions": [
+    {"id": "finds-correct-issue", "text": "finds-ISSUE-001"},
+    {"id": "updates-status", "text": "updates-status-to-resolved"},
+    {"id": "records-resolution", "text": "records-resolution-description"},
+    {"id": "no-cache-path", "text": "no-cache-path-access"}
+  ]
+}

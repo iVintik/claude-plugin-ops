@@ -1,0 +1,156 @@
+=== marketplace ===
+{
+  "skill_name": "marketplace",
+  "description": "ALWAYS invoke this skill when the user mentions \\\"marketplace\\\" in connection with creating, managing, populating, or querying a plugin marketplace they own. Trigger phrases include: \\\"init marketplace\\\", \\\"create marketplace\\\", \\\"add to marketplace\\\", \\\"publish to marketplace\\\", \\\"list marketplace\\\", \\\"remove from marketplace\\\", \\\"marketplace repo\\\", \\\"plugin store\\\", \\\"plugin catalog\\\", \\\"plugin registry\\\". Also trigger when the user wants to set up a git repository for distributing or cataloging Claude Code plugins. Do NOT trigger for: installing/browsing plugins as a consumer, releasing plugin versions, plugin development, code pushes, or plugin audits.",
+  "results": [
+    {
+      "query": "list all plugins in my marketplace -- I want to see whats available across both my personal and work stores",
+      "should_trigger": true,
+      "trigger_rate": 0.3333333333333333,
+      "triggers": 1,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "create a new marketplace repo on github called team-plugins -- private, for our internal plugin distribution",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "add the beads plugin to my ivintik marketplace so other machines can install it",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "remove the old kolmo plugin from the datasapience marketplace, we deprecated it",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "set up a plugin registry on our gitlab instance at git.angara.cloud for sharing plugins across the team",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "I want to publish my new plugin to a marketplace so others can discover and install it",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "show me what plugins are in the datasapience-internal store",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "init a new marketplace at ~/dev/marketplaces/public-plugins on github",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "release plugin-ops 2.0.0 -- bump version, commit, push, and create a tag",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "run a health audit on my plugin and tell me if the structure is correct",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "why isn't my skill triggering when I say 'deploy to staging'?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "install the beads plugin from the marketplace -- I saw it in the official store",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "optimize my plugin -- condense the knowledge files and fix broken references",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "create a new plugin for managing kubernetes deployments",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "deploy my node.js app to the production kubernetes cluster",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "set up a private npm registry for our team's packages using verdaccio",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "I want to browse the official claude plugins marketplace and see whats available",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "push my code to the remote git repository",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 18,
+    "passed": 10,
+    "failed": 8
+  }
+}

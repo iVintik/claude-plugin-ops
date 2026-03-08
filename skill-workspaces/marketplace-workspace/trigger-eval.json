@@ -1,0 +1,20 @@
+[
+  {"query": "list all plugins in my marketplace -- I want to see whats available across both my personal and work stores", "should_trigger": true},
+  {"query": "create a new marketplace repo on github called team-plugins -- private, for our internal plugin distribution", "should_trigger": true},
+  {"query": "add the beads plugin to my ivintik marketplace so other machines can install it", "should_trigger": true},
+  {"query": "remove the old kolmo plugin from the datasapience marketplace, we deprecated it", "should_trigger": true},
+  {"query": "set up a plugin registry on our gitlab instance at git.angara.cloud for sharing plugins across the team", "should_trigger": true},
+  {"query": "I want to publish my new plugin to a marketplace so others can discover and install it", "should_trigger": true},
+  {"query": "show me what plugins are in the datasapience-internal store", "should_trigger": true},
+  {"query": "init a new marketplace at ~/dev/marketplaces/public-plugins on github", "should_trigger": true},
+  {"query": "release plugin-ops 2.0.0 -- bump version, commit, push, and create a tag", "should_trigger": false},
+  {"query": "run a health audit on my plugin and tell me if the structure is correct", "should_trigger": false},
+  {"query": "why isn't my skill triggering when I say 'deploy to staging'?", "should_trigger": false},
+  {"query": "install the beads plugin from the marketplace -- I saw it in the official store", "should_trigger": false},
+  {"query": "optimize my plugin -- condense the knowledge files and fix broken references", "should_trigger": false},
+  {"query": "create a new plugin for managing kubernetes deployments", "should_trigger": false},
+  {"query": "deploy my node.js app to the production kubernetes cluster", "should_trigger": false},
+  {"query": "set up a private npm registry for our team's packages using verdaccio", "should_trigger": false},
+  {"query": "I want to browse the official claude plugins marketplace and see whats available", "should_trigger": false},
+  {"query": "push my code to the remote git repository", "should_trigger": false}
+]

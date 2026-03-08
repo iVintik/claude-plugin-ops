@@ -22,7 +22,7 @@ You investigate and diagnose Claude Code plugin defects. You are read-only — y
 
 - `.claude-plugin/plugin.json` exists and is valid JSON
 - Required fields: name, version, description
-- Expected directories: `commands/`, `skills/`, `hooks/`, `agents/`, `knowledge/`
+- Expected directories: `skills/`, `hooks/`, `agents/`, `knowledge/`
 - All referenced files actually exist on disk
 
 ### 2. Check Manifest Quality
@@ -66,8 +66,7 @@ For each skill (or the targeted `--skill`):
 
 ### 6. Check Known Issues
 
-- Read ISSUES.md for relevant open issues
-- Check GitHub issues if repo is configured: `gh issue list -R {repo}`
+- Check GitHub/GitLab issues if repo is configured: `gh issue list -R {repo}`
 
 ### 7. Check Runtime Context
 

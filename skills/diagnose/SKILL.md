@@ -1,6 +1,6 @@
 ---
 name: diagnose
-description: "Diagnose why a plugin skill fails to load, doesn't trigger when expected, errors out, or behaves unexpectedly. Use proactively whenever you notice a plugin or skill misbehaving, or when the user says anything like: \"why isn't this working\", \"plugin not triggering\", \"skill broken\", \"debug plugin\", \"diagnose plugin\", \"check plugin health\", \"this skill should have fired\". Also trigger when a hook fails silently or a plugin won't load."
+description: "Diagnose why a Claude Code plugin skill fails to load, doesn't trigger when expected, errors out, or behaves unexpectedly. Use proactively whenever you notice a plugin or skill misbehaving, or when the user reports something like: \"why isn't this working\", \"plugin not triggering\", \"skill broken\", \"debug plugin\", \"diagnose plugin\", \"this skill should have fired\", \"fix plugin\", \"skill overlap\", \"wrong skill triggered\". Also trigger when a hook fails silently, a plugin won't load, or tools from an MCP server aren't available. Does NOT cover: overall plugin health audits (use reflect), size optimization (use optimize), or version releases (use release)."
 argument-hint: "[plugin-path] [--skill SKILL-NAME]"
 ---
 
@@ -47,8 +47,7 @@ For each skill (or `--skill` target):
 - Trigger descriptions match intended use
 - Tools list appropriate for the task
 
-### 5. Known Issues & Runtime
-- Check `ISSUES.md` for relevant open issues
+### 5. Runtime Context
 - Check remote repo issues: `gh issue list -R {repo}`
 - Verify plugin is installed: `claude plugin list`
 - Check for conflicting plugins with overlapping skill descriptions
@@ -66,3 +65,5 @@ Plugin Diagnostics: {plugin-name} v{version}
 
 Summary: {N} defects, root cause, fix priority
 ```
+
+If skill description quality is the root cause, recommend running `/skill-creator (from the plugin-dev plugin)` to iterate with test prompts and description optimization.

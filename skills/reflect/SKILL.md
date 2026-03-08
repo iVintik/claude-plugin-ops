@@ -1,6 +1,6 @@
 ---
 name: reflect
-description: "Run a comprehensive health audit on a Claude Code plugin — checks structure, skills quality, knowledge size, hooks, MCP config, and cross-references. Use when the user asks to \"analyze plugin health\", \"audit plugin\", \"assess plugin quality\", \"review plugin structure\", \"run self-assessment\", or \"how healthy is this plugin\". Also trigger proactively after significant plugin changes to catch regressions."
+description: "Run a comprehensive health audit on a Claude Code plugin — checks structure, skills quality, knowledge size, hooks, MCP config, and cross-references. Use when the user asks to \"analyze plugin health\", \"audit plugin\", \"assess plugin quality\", \"review plugin structure\", \"run self-assessment\", \"how healthy is this plugin\", \"health check\", \"is this plugin any good\", or \"check if my plugin is correct\". Also trigger proactively after significant plugin changes (new skills, hook changes, MCP updates) to catch regressions before release. Does NOT cover: debugging specific failures (use diagnose), reducing plugin size (use optimize), or releasing new versions (use release)."
 argument-hint: "[plugin-path] [--brief]"
 ---
 
@@ -53,9 +53,6 @@ For each file in `knowledge/**/*.md`:
 - CLAUDE.md consistent with actual structure
 - README.md lists all available skills
 
-### 7. Issues Integration
-If ISSUES.md exists: count open vs resolved, check for regressions.
-
 ## Write REFLECTIONS.md
 
 Read `knowledge/lifecycle-formats.md` for format. Prepend entry:
@@ -71,12 +68,7 @@ Read `knowledge/lifecycle-formats.md` for format. Prepend entry:
 
 ### Improvement Opportunities
 - {actionable suggestions, ordered by impact}
-
-### Issues Discovered
-- {new ISSUE-NNN entries if created, or "None"}
 ```
-
-For critical/major findings, auto-create entries in ISSUES.md.
 
 ## Output
 
@@ -88,9 +80,11 @@ Skills:     N total, M with issues
 Knowledge:  size KB across N files
 Hooks:      present/absent (status)
 MCP:        present/absent (status)
-Issues:     N open, M resolved
 
 Top 3 improvement opportunities
+
+For skills needing deeper refinement, recommend running /skill-creator (from the plugin-dev plugin)
+to iterate with test prompts and eval loops.
 
 Full analysis written to REFLECTIONS.md
 ```
