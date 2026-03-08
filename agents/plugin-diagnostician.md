@@ -4,6 +4,7 @@ description: Diagnoses root causes when a plugin skill fails to load, doesn't tr
 tools: Read, Grep, Glob, Bash, ToolSearch
 model: sonnet
 maxTurns: 12
+mcpServers: []
 ---
 
 # Plugin Diagnostician

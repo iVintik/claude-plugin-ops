@@ -4,6 +4,7 @@ description: Comprehensive health audit of a Claude Code plugin — checks struc
 tools: Read, Grep, Glob, Bash, ToolSearch
 model: haiku
 maxTurns: 15
+mcpServers: []
 ---
 
 # Plugin Auditor

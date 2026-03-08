@@ -1,98 +1,57 @@
 ---
 name: diagnose
-description: When a plugin skill fails to load, fails with errors, isn't automatically triggered when expected, or produces unexpected behavior — diagnose the root cause in the plugin. Also use when the user asks to "diagnose plugin", "debug plugin", "why isn't this skill working", "plugin not triggering", or "check plugin health".
+description: "Diagnose why a plugin skill fails to load, doesn't trigger when expected, errors out, or behaves unexpectedly. Use proactively whenever you notice a plugin or skill misbehaving, or when the user says anything like: \"why isn't this working\", \"plugin not triggering\", \"skill broken\", \"debug plugin\", \"diagnose plugin\", \"check plugin health\", \"this skill should have fired\". Also trigger when a hook fails silently or a plugin won't load."
 argument-hint: "[plugin-path] [--skill SKILL-NAME]"
 ---
 
 # Plugin Diagnostics
 
-Investigate and report plugin defects. When a plugin or skill doesn't work as expected, the problem is in the plugin — diagnose it as such.
+Investigate and report plugin defects. Frame findings as plugin defects, not agent failure — if a skill wasn't triggered, that's a description quality issue; if a hook failed, that's a configuration defect.
 
 ## Parse Arguments
 
 Parse `$ARGUMENTS`:
-- **First positional argument** (optional): Path to plugin directory. If omitted, use current working directory.
-- `--skill SKILL-NAME`: Focus diagnosis on a specific skill
+- **First positional** (optional): Path to plugin directory. Default: current working directory.
+- `--skill SKILL-NAME`: Focus on a specific skill.
 
-If no arguments provided and no `.claude-plugin/plugin.json` in current directory, ask the user which plugin to diagnose.
+If no plugin found at path, ask the user which plugin to diagnose.
 
-**CRITICAL: Cache vs Repo**
-- `~/.claude/plugins/cache/` contains READ-ONLY installed copies — NEVER edit these
-- Always resolve to the real git repo. Use atlas: `atlas_search_projects(query="plugin-name")` to find the repo path
-
-## Key Principle
-
-**Frame findings as plugin defects, not agent failures.** If a skill wasn't triggered when it should have been, that's a skill description quality issue. If a hook failed silently, that's a hook configuration defect. Do NOT self-blame — report the root cause in the plugin.
+**Cache guard**: `~/.claude/plugins/cache/` is READ-ONLY. Resolve to the real git repo via atlas: `atlas_search_projects(query="plugin-name")`.
 
 ## Diagnostic Steps
 
-### 1. Verify Plugin Structure
+### 1. Plugin Structure
+- `.claude-plugin/plugin.json` exists, valid JSON, has name/version/description
+- Declared directories (`skills/`, `hooks/`, `agents/`, `knowledge/`) exist
+- Referenced files in manifest actually exist on disk
 
-Check for required files:
-- `.claude-plugin/plugin.json` exists and is valid JSON
-- Read manifest: name, version, description
-- Check for expected directories: `commands/`, `skills/`, `hooks/`, `agents/`, `knowledge/`
-- Verify referenced files actually exist
+### 2. Skills (most common defect source)
 
-Report any structural defects found.
+For each skill (or `--skill` target):
 
-### 2. Check Manifest Quality
+**Structure**: Valid YAML frontmatter with `name` + `description`, valid markdown body.
 
-- Is the plugin description clear and specific?
-- Does the version follow semver?
-- Are all declared components present on disk?
+**Description quality** (the #1 reason skills don't trigger):
+- Must be proactive: BAD "Reviews code" → GOOD "Use when user has modified code and needs review. Trigger proactively after changes."
+- Must include trigger phrases the user would say
+- Must specify proactive triggers if the skill should auto-fire
 
-### 3. Diagnose Skills (if applicable)
+**Content**: No bare `$VARIABLE` outside code blocks, no broken refs to missing knowledge/files.
 
-For each skill (or the specific `--skill` target):
-
-**a. SKILL.md structure**
-- Has valid YAML frontmatter with `name` and `description`
-- Description is present and non-empty
-- Content after frontmatter is valid markdown
-
-**b. Description quality (most common defect)**
-- Is it **proactive enough**? Skills that should auto-trigger must say so explicitly:
-  - BAD: "Reviews code quality" (passive, won't trigger)
-  - GOOD: "Use this agent when the user has created or modified code and needs quality review. Trigger proactively after code changes."
-- Does it cover **trigger phrases** the user might say?
-  - BAD: "Manages issues" (too vague)
-  - GOOD: 'Use when the user asks to "track issue", "add bug", "list issues", or mentions issue tracking'
-- Does it specify **proactive triggers** if the skill should auto-fire?
-  - Skills that should run after certain events need explicit "Trigger proactively after X" language
-
-**c. Content issues**
-- Unescaped bash patterns (e.g., bare `$VARIABLE` outside code blocks)
-- Broken YAML frontmatter (missing `---` delimiters, bad indentation)
-- References to files that don't exist in the plugin
-- References to knowledge files that are missing
-
-### 4. Diagnose Hooks (if applicable)
-
-- `hooks/hooks.json` is valid JSON
-- Hook event names are valid (`SessionStart`, `PreToolUse`, `PostToolUse`, etc.)
+### 3. Hooks
+- `hooks/hooks.json` valid JSON with correct event names
 - Referenced scripts exist and are executable
-- Timeout values are reasonable (not too short for the operation)
-- Matcher patterns are correct
+- Timeouts reasonable for the operation
 
-### 5. Diagnose Agents (if applicable)
+### 4. Agents
+- Trigger descriptions match intended use
+- Tools list appropriate for the task
 
-- Agent definitions have proper trigger descriptions
-- Agent tools list is appropriate for the task
-
-### 6. Check for Known Issues
-
-If the plugin has an `ISSUES.md`, read it for relevant open issues.
-
-If the plugin has a remote repository:
-- Run `gh issue list -R {repo}` to check for existing reports
-- Note any issues that match the current symptoms
-
-### 7. Check Runtime Context
-
-- Is the plugin actually installed? Run `claude plugin list` and check
-- Are there conflicting plugins with similar skill names/descriptions?
-- Could another plugin's skill be "stealing" the trigger?
+### 5. Known Issues & Runtime
+- Check `ISSUES.md` for relevant open issues
+- Check remote repo issues: `gh issue list -R {repo}`
+- Verify plugin is installed: `claude plugin list`
+- Check for conflicting plugins with overlapping skill descriptions
 
 ## Report Format
 
@@ -101,28 +60,9 @@ Plugin Diagnostics: {plugin-name} v{version}
 
 {DEFECT-1}: {category} — {short title}
   Location: {file-path}:{line-number}
-  Severity: {critical | major | minor}
-  Details: {what's wrong and why it causes the observed behavior}
-  Fix: {concrete change to make}
+  Severity: critical | major | minor
+  Details: {what's wrong and why}
+  Fix: {concrete change}
 
-{DEFECT-2}: ...
-
-Summary:
-  {N} defect(s) found
-  {Root cause of the reported symptom}
-  {Recommended fix priority}
+Summary: {N} defects, root cause, fix priority
 ```
-
-## Severity Levels
-
-- **Critical**: Plugin won't load, skill completely non-functional
-- **Major**: Skill doesn't trigger when expected, hook fails silently, wrong behavior
-- **Minor**: Suboptimal description quality, missing but non-essential files
-
-## Common Defect Patterns
-
-1. **Skill not triggering**: Description lacks proactive trigger language or doesn't cover the user's phrasing
-2. **Skill triggered but errors**: SKILL.md references missing files, has syntax issues, or makes invalid tool assumptions
-3. **Hook not firing**: Wrong event name, script not executable, timeout too short
-4. **Plugin not loading**: Invalid plugin.json, missing required fields
-5. **Wrong skill triggered**: Multiple plugins/skills with overlapping descriptions — specificity needed

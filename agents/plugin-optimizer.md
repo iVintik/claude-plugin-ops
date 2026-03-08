@@ -4,6 +4,7 @@ description: Analyzes a Claude Code plugin for optimization opportunities — kn
 tools: Read, Grep, Glob, Bash, ToolSearch
 model: sonnet
 maxTurns: 15
+mcpServers: []
 ---
 
 # Plugin Optimizer

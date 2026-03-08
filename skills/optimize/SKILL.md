@@ -1,116 +1,61 @@
 ---
 name: optimize
-description: Optimize a Claude Code plugin — reduce knowledge size, improve skill clarity, remove dead references. Use when the user asks to slim down a plugin, clean up a plugin, optimize plugin size, or improve plugin quality.
+description: "Optimize a Claude Code plugin — reduce knowledge size, improve skill descriptions, remove dead references, condense verbose content. Use when the user asks to \"slim down\", \"clean up\", \"optimize\", \"reduce size\", \"make plugin smaller\", \"trim plugin\", \"reduce footprint\", or \"improve plugin quality\". Runs in dry-run mode by default and respects non-regression protocol for resolved issues."
 argument-hint: "[plugin-path] [--dry-run] [--target knowledge|skills|all]"
 ---
 
 # Plugin Optimization
 
-Optimize a plugin with non-regression guarantees. Reads ISSUES.md to protect resolved fixes.
+Optimize a plugin with non-regression guarantees.
 
 ## Parse Arguments
 
 Parse `$ARGUMENTS`:
-- **First positional argument** (optional): Path to plugin directory. If omitted, use current working directory.
-- `--dry-run`: Report what would change without modifying files
-- `--target`: Focus area — `knowledge` (default), `skills`, or `all`
+- **First positional** (optional): Path to plugin directory. Default: current working directory.
+- `--dry-run`: Report changes without applying (default behavior).
+- `--target`: Focus area — `knowledge` (default), `skills`, or `all`.
 
-## Locate Plugin
+**Cache guard**: `~/.claude/plugins/cache/` is READ-ONLY. Resolve to the real git repo via atlas: `atlas_search_projects(query="plugin-name")`.
 
-**CRITICAL: Cache vs Repo**
-- `~/.claude/plugins/cache/` contains READ-ONLY installed copies — NEVER edit these
-- Always resolve to the real git repo before editing. Use atlas: `atlas_search_projects(query="plugin-name")` to find the repo path
-- If the plugin-path points into `~/.claude/plugins/cache/`, STOP and find the real repo first
+## Non-Regression Protocol (mandatory)
 
-1. Verify `.claude-plugin/plugin.json` exists at the resolved repo path
-2. Read plugin name and version
+Read `knowledge/lifecycle-formats.md` for the full protocol.
 
-## Non-Regression Protocol
+1. Read ISSUES.md — collect all resolved issues
+2. Record: ID, title, resolution, files/logic involved
+3. This "protected set" must remain intact after changes
+4. Skip changes that would touch protected files/sections — explain why
 
-**This step is MANDATORY before making any changes.**
+## Knowledge Optimization (target: knowledge | all)
 
-Read `knowledge/lifecycle-formats.md` for the non-regression protocol.
+- Measure each file, flag > 10 KB or total > 50 KB
+- Find duplicates, generic content, outdated refs, verbose sections
+- For each proposed change: check against protected set first
+- Apply: remove duplicates (keep detailed version), condense, remove dead refs, split oversized files
 
-1. **Read ISSUES.md** — collect ALL resolved issues
-2. For each resolved issue, record:
-   - Issue ID and title
-   - Resolution description
-   - Files/logic mentioned in the resolution
-3. Store this as a "protected set" — changes to these files/sections require extra care
+## Skills Optimization (target: skills | all)
 
-## Knowledge Optimization
+- Check description trigger coverage and proactiveness
+- Find unclear steps, broken knowledge refs, overly complex flows
+- For each proposed change: check against protected set first
+- Apply: fix broken refs, sharpen descriptions, clarify steps
 
-If `--target` is `knowledge` or `all`:
+## Post-Optimization
 
-### Size Analysis
-- Measure each knowledge file
-- Identify files > 10 KB
-- Calculate total knowledge size
-
-### Content Analysis
-- Find duplicate content across files
-- Identify generic content that could be removed
-- Find outdated references (to non-existent files, old versions)
-- Detect overly verbose sections that can be condensed
-
-### Proposed Changes
-For each change:
-1. **Check against protected set** — if the change touches a file/section involved in a resolved issue, SKIP it and explain why
-2. Describe what would change and why
-3. Estimate size reduction
-
-### Apply Changes (unless --dry-run)
-- Use Edit tool for modifications
-- Remove duplicate sections (keep the more detailed version)
-- Condense verbose explanations
-- Remove outdated references
-- Split oversized files if > 10 KB
-
-## Skills Optimization
-
-If `--target` is `skills` or `all`:
-
-### Clarity Analysis
-- Check description trigger coverage
-- Identify unclear or missing steps
-- Find references to non-existent knowledge files or tools
-- Detect overly complex skills that could be simplified
-
-### Proposed Changes
-For each change:
-1. **Check against protected set** — same non-regression check
-2. Describe what would change and why
-
-### Apply Changes (unless --dry-run)
-- Fix broken knowledge references
-- Improve description trigger phrases
-- Clarify ambiguous steps
-
-## Post-Optimization Verification
-
-After all changes are applied:
-
-1. **Re-check resolved issues** — verify each resolved issue's fix is still intact
-2. **Update ISSUES.md** — add notes to any issues affected by optimization:
-   ```
-   - {today's date}: Verified during optimization — fix intact
-   ```
-3. **Update REFLECTIONS.md** — prepend optimization entry using format from `knowledge/lifecycle-formats.md`
+1. Re-verify all resolved issues — fixes still intact
+2. Update ISSUES.md: add verification notes
+3. Prepend optimization entry to REFLECTIONS.md (format from `knowledge/lifecycle-formats.md`)
 
 ## Output
-
-Display summary:
 
 ```
 Optimization {applied|dry-run} for {plugin-name} v{version}
 
-Knowledge: {before} KB → {after} KB ({reduction}% reduction)
-  - {file}: {change description}
+Knowledge: {before} KB → {after} KB ({reduction}%)
+  - {file}: {change}
 
 Skills: {N} modified
-  - {skill}: {change description}
+  - {skill}: {change}
 
 Non-regression: {N} resolved issues checked, {all intact | M conflicts skipped}
-
-{Written to REFLECTIONS.md | Dry run — no files modified}
 ```

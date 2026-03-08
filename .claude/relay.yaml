@@ -1,0 +1,8 @@
+issue_trackers:
+  - name: github
+    type: github
+    default: true
+    repo: "iVintik/claude-plugin-ops"
+  - name: beads
+    type: beads
+    scope: local

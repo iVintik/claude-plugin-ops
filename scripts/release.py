@@ -186,13 +186,14 @@ def release(plugin_path, new_version, dry_run=False, no_tag=False):
     dirty = run("git status --porcelain", cwd=plugin_path, check=False)
     warnings = []
     if dirty:
-        warnings.append("Working tree has uncommitted changes")
+        warnings.append("Working tree has uncommitted changes — they will be included in the release commit")
 
     # 4. Update plugin.json, commit, push
     data["version"] = new_version
     if not dry_run:
         write_plugin_json(pj_path, data)
-        run(f"git add .claude-plugin/plugin.json", cwd=plugin_path)
+        # Stage ALL changes so nothing is left behind in the release
+        run("git add -A", cwd=plugin_path)
         run(f'git commit -m "release: v{new_version}"', cwd=plugin_path)
         run("git push", cwd=plugin_path)
 

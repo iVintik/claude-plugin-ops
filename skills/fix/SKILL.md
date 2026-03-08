@@ -1,6 +1,6 @@
 ---
 name: fix
-description: Fix open issues in a Claude Code plugin with non-regression checks. Use when the user asks to fix plugin issues, resolve plugin bugs, implement fixes for tracked issues, or debug a plugin problem.
+description: "Fix open issues tracked in a plugin's ISSUES.md with non-regression safety. Use when the user asks to \"fix plugin issues\", \"resolve plugin bugs\", \"fix this issue\", \"handle this bug\", \"implement the fix\", or mentions fixing tracked plugin problems. Works with ISSUES.md entries created by /plugin-ops:issues."
 argument-hint: "[plugin-path] [--issue ISSUE-NNN] [--all-open] [--dry-run]"
 ---
 
@@ -11,115 +11,60 @@ Fix tracked issues from ISSUES.md with non-regression guarantees.
 ## Parse Arguments
 
 Parse `$ARGUMENTS`:
-- **First positional argument** (optional): Path to plugin directory. If omitted, use current working directory.
-- `--issue ISSUE-NNN`: Fix a specific issue
-- `--all-open`: Attempt to fix all open issues (process in severity order: critical → major → minor → enhancement)
-- `--dry-run`: Analyze and propose fixes without applying them
+- **First positional** (optional): Path to plugin directory. Default: current working directory.
+- `--issue ISSUE-NNN`: Fix a specific issue.
+- `--all-open`: Fix all open issues (severity order: critical → major → minor → enhancement).
+- `--dry-run`: Analyze and propose fixes without applying.
 
-If neither `--issue` nor `--all-open` is specified, list open issues and ask the user which to fix.
+If neither `--issue` nor `--all-open`, list open issues and ask which to fix.
 
-## Locate Plugin
+**Cache guard**: `~/.claude/plugins/cache/` is READ-ONLY. Resolve to the real git repo via atlas: `atlas_search_projects(query="plugin-name")`.
 
-**CRITICAL: Cache vs Repo**
-- `~/.claude/plugins/cache/` contains READ-ONLY installed copies — NEVER edit these
-- Always resolve to the real git repo before editing. Use atlas: `atlas_search_projects(query="plugin-name")` to find the repo path
-- If the plugin-path points into `~/.claude/plugins/cache/`, STOP and find the real repo first
+## Non-Regression Protocol (mandatory)
 
-1. Verify `.claude-plugin/plugin.json` exists at the resolved repo path
-2. Read plugin name and version
+Read `knowledge/lifecycle-formats.md` for the full protocol.
 
-## Non-Regression Protocol
+1. Read ISSUES.md — collect all resolved issues with ID, title, resolution, files
+2. This "protected set" must remain intact after fixes
 
-**This step is MANDATORY before making any changes.**
+## For Each Issue
 
-Read `knowledge/lifecycle-formats.md` for the non-regression protocol.
-
-1. **Read ISSUES.md** — collect ALL resolved issues
-2. For each resolved issue, record:
-   - Issue ID, title, and resolution
-   - Files and code sections mentioned
-   - Date resolved
-3. This is the "protected set" — must remain intact after fixes
-
-## For Each Issue to Fix
-
-### 1. Understand the Issue
-
-Read the issue entry from ISSUES.md:
-- Description: What is wrong
-- Context: How it was discovered
-- Notes: Any additional observations
-- Severity: Determines priority
+### 1. Understand
+Read the ISSUES.md entry: description, context, severity, notes.
 
 ### 2. Investigate
+Read relevant files, identify root cause, determine what needs to change.
 
-Based on the issue description:
-- Read the relevant files mentioned or implied
-- Understand the current state of the code/content
-- Identify the root cause
-- Determine what needs to change
+### 3. Plan
+For each proposed change, check against protected set:
+- Touches resolved fix → **SKIP**, explain conflict
+- Same file but different section → proceed with caution
+- No overlap → proceed
 
-### 3. Plan the Fix
+### 4. Apply (unless --dry-run)
+Minimal, focused changes. Edit tool for modifications, Write only for new files.
 
-For each proposed change:
-1. **Check against protected set** — will this change touch any file/section involved in a resolved issue?
-   - If YES and the change would modify the resolved fix: **SKIP** and explain the conflict
-   - If YES but the change is in a different section of the same file: proceed with caution
-   - If NO: proceed normally
-
-2. Describe the fix clearly
-
-### 4. Apply the Fix (unless --dry-run)
-
-- Use Edit tool for file modifications
-- Use Write tool only for new files
-- Make minimal, focused changes — fix only what the issue describes
-
-### 5. Verify Non-Regression
-
-After applying the fix:
-1. Re-read files involved in ALL resolved issues
-2. Verify each resolved fix is still present and functional
-3. If any regression detected:
-   - REVERT the change that caused it
-   - Report the conflict to the user
-   - Do NOT mark the current issue as resolved
+### 5. Verify
+Re-read files for all resolved issues. If regression detected: revert the change, report conflict, do NOT mark current issue resolved.
 
 ### 6. Update ISSUES.md
+Success: status → `resolved`, set date, write resolution.
+Blocked: add note with date explaining blocker.
 
-If fix was successfully applied and verified:
-- Change status to `resolved`
-- Set resolved date to today
-- Write resolution description explaining what was changed
+## Post-Fix
 
-If fix could not be applied:
-- Add a note with today's date explaining the blocker
-
-## Post-Fix Summary
-
-Update REFLECTIONS.md — prepend fix entry using the format from `knowledge/lifecycle-formats.md`.
+Prepend fix entry to REFLECTIONS.md (format from `knowledge/lifecycle-formats.md`).
 
 ## Output
-
-Display summary:
 
 ```
 Fix results for {plugin-name} v{version}
 
-{For each issue attempted:}
 ISSUE-{NNN} ({severity}): {title}
-  Status: {resolved | blocked | skipped}
-  {Resolution description or reason for skip}
+  Status: resolved | blocked | skipped
+  {resolution or reason}
 
-Non-regression: {N} resolved issues verified — {all intact | M regressions detected}
-
-{Updated ISSUES.md and REFLECTIONS.md | Dry run — no files modified}
+Non-regression: {N} resolved issues verified — {all intact | M regressions}
 ```
 
-## Handling Complex Fixes
-
-If an issue requires changes across multiple files or significant refactoring:
-1. Break the fix into steps
-2. Verify non-regression after EACH step
-3. If any step causes regression, revert that step and report partial progress
-4. Update issue status to `in-progress` with notes on what was completed
+For multi-file fixes: break into steps, verify non-regression after each step, revert on regression, update status to `in-progress` with partial progress notes.

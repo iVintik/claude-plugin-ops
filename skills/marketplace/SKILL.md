@@ -1,6 +1,6 @@
 ---
 name: marketplace
-description: Manage plugin marketplaces — create, list, add, or remove plugins from marketplace repositories. Use when the user asks to create a marketplace, publish a plugin, list marketplace plugins, add a plugin to a marketplace, manage a plugin store, or set up a plugin registry.
+description: "Manage Claude Code plugin marketplaces — create, list, add, or remove plugins from marketplace repositories. Use when the user asks to \"create a marketplace\", \"publish a plugin\", \"list marketplace plugins\", \"add plugin to store\", \"manage plugin catalog\", \"set up a plugin registry\", \"remove from marketplace\", or anything about plugin distribution and discovery."
 argument-hint: "<subcommand> [options]"
 ---
 
@@ -10,121 +10,59 @@ Manage Claude Code plugin marketplaces. A marketplace is a git repository with a
 
 ## Parse Arguments
 
-Parse `$ARGUMENTS` for a subcommand:
+Parse `$ARGUMENTS` for subcommand:
 - `init <local-path>` — Create a new marketplace repository
 - `list [--store name]` — List plugins in a marketplace
 - `add <plugin-path> [--store name]` — Add a plugin to a marketplace
-- `remove <plugin-name> [--store name]` — Remove a plugin from a marketplace
+- `remove <plugin-name> [--store name]` — Remove a plugin
 
-If no subcommand given, show usage help.
+No subcommand → show usage help.
 
-## Read Configuration
+## Configuration
 
-Read `knowledge/configuration.md` for the config file format.
-
-Look for `.claude/plugin-ops.local.md` in:
-1. Current working directory
-2. User's home directory
-
-Parse the YAML frontmatter to get marketplace `local_path` entries.
-
-If `--store name` is provided, use that marketplace. Otherwise use the first configured marketplace.
-
-If no config exists and no `--store` flag, prompt the user to set up a marketplace.
+Read `knowledge/configuration.md` for config format. Look for `.claude/plugin-ops.local.md` in cwd then home dir. Use `--store name` to select marketplace, otherwise first configured.
 
 ## init — Create New Marketplace
 
-Ask the user for:
-1. **Provider**: `github` or `gitlab` (detect from context if possible)
-2. **Repository name**: e.g., `my-claude-plugins`
-3. **Visibility**: public or private (default: private)
-4. **Local path**: where to clone it
+Gather: provider (github/gitlab), repo name, visibility (default: private), local path.
 
-### For GitHub:
-```bash
-gh repo create <name> --<visibility> --clone
-```
+GitHub: `gh repo create <name> --<visibility> --clone`
+GitLab: `glab project create` or guide API curl.
 
-### For GitLab:
-- If `glab` CLI is available: `glab project create <name> --visibility <vis>`
-- If not: guide the user to create via GitLab UI or API, provide the API curl command:
-  ```bash
-  curl --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
-    -X POST "https://<gitlab-url>/api/v4/projects" \
-    -d "name=<name>&visibility=<vis>"
-  ```
-
-### Initialize marketplace:
-
-Create `.claude-plugin/marketplace.json` using schema from `knowledge/marketplace.md`:
-
+Initialize `.claude-plugin/marketplace.json` (schema from `knowledge/marketplace.md`):
 ```json
 {
   "name": "<repo-name>",
-  "metadata": {
-    "description": "Claude Code plugin marketplace",
-    "version": "1.0.0"
-  },
+  "metadata": { "description": "Claude Code plugin marketplace", "version": "1.0.0" },
   "plugins": []
 }
 ```
-
-Commit and push.
-
-### Update config:
-
-Add the new marketplace to `.claude/plugin-ops.local.md`. Create the config file if it doesn't exist.
+Commit, push, update config.
 
 ## list — List Marketplace Plugins
 
-For the target marketplace(s):
-
-1. Get `local_path` from config
-2. Read `.claude-plugin/marketplace.json` directly from the local clone
-3. Display plugins table:
-
+Read `marketplace.json` from local clone, display:
 ```
-Marketplace: {name} ({local_path})
-Remote: {git remote get-url origin}
-
+Marketplace: {name} ({path})
 | Plugin | Version | Description |
-|--------|---------|-------------|
-| plugin-a | 1.2.0 | Does X |
-| plugin-b | 0.3.1 | Does Y |
-
 {N} plugins total
 ```
-
-If `--store` is not specified and multiple marketplaces are configured, list all of them.
+If no `--store` and multiple configured, list all.
 
 ## add — Add Plugin to Marketplace
 
-1. Read the plugin's `.claude-plugin/plugin.json` from `<plugin-path>`
-2. Extract: name, description, version
-3. Determine the plugin's git remote URL (`git remote get-url origin`)
-4. Read `marketplace.json` from the target marketplace's `local_path`
-5. Check if plugin already exists:
-   - If yes: ask to update version/description instead
-   - If no: append new entry
-6. Write updated `marketplace.json`
-7. Commit: `"add: <plugin-name> v<version>"`
-8. Push to remote
-9. Display confirmation
+1. Read plugin's `plugin.json` for name, description, version
+2. Get plugin's git remote URL
+3. Check for existing entry (offer update if exists)
+4. Append to `marketplace.json`, commit, push
 
 ## remove — Remove Plugin from Marketplace
 
-1. Read `marketplace.json` from the target marketplace's `local_path`
-2. Find the plugin by name
-3. If not found, show available plugins
-4. Confirm removal with the user
-5. Remove the entry from `plugins` array
-6. Write updated `marketplace.json`
-7. Commit: `"remove: <plugin-name>"`
-8. Push to remote
-9. Display confirmation
+1. Find plugin by name (show available if not found)
+2. Confirm with user
+3. Remove entry, commit, push
 
 ## Error Handling
-
-- If `local_path` doesn't exist or has no `marketplace.json`, report clearly
-- If git push fails, report and suggest `git pull` first
-- Never expose tokens or credentials in output
+- Missing `local_path` or `marketplace.json`: report clearly
+- Git push fails: suggest `git pull` first
+- Never expose tokens in output
